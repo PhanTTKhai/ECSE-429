@@ -1,5 +1,7 @@
 import unittest
 import requests
+import subprocess
+import time
 import xml.etree.ElementTree as ET
 
 
@@ -14,6 +16,22 @@ class TestAPITodos(unittest.TestCase):
     }
     created_todo_ids = []
     created_categories_ids = []
+
+    @classmethod
+    def setUpClass(cls):
+        cls.process = subprocess.Popen(['java', '-jar', 'runTodoManagerRestAPI-1.5.5.jar'])
+        time.sleep(5)  # Wait a few seconds for the server to start
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.process.terminate()
+
+    def test_service_is_running(self):
+        try:
+            response = requests.get('http://localhost:4567/')
+            self.assertEqual(response.status_code, 200)
+        except requests.exceptions.ConnectionError:
+            self.fail("Service is not running!")
 
     def tearDown(self):
         """ Delete todos created for the test """
