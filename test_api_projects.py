@@ -14,7 +14,7 @@ class TestAPIProjects(unittest.TestCase):
         """ Delete created projects, todos, and categories """
         for project_id in self.created_project_ids:
             response = requests.delete(f"{self.BASE_URL}/projects/{project_id}", headers=self.json_headers)
-            if response.status_code != 404:  # Skip if resource was not found
+            if response.status_code != 404:
                 self.assertEqual(200, response.status_code)
         for todo_id in self.created_todo_ids:
             response = requests.delete(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
@@ -70,17 +70,12 @@ class TestAPIProjects(unittest.TestCase):
 
     def test_get_specific_project(self):
         """Test retrieving a specific project by ID."""
-        # Create a project first
         data = {"title": "Project for Retrieval", "description": "Testing specific project retrieval"}
         creation_response = requests.post(f"{self.BASE_URL}/projects", json=data)
         project_id = creation_response.json()["id"]
-
-        # Now retrieve the specific project
         response = requests.get(f"{self.BASE_URL}/projects/{project_id}")
         self.assertEqual(response.status_code, 200)
-
-        # Adjusting to handle the nested structure
-        project_data = response.json().get("projects", [{}])[0]  # Access the first item in 'projects'
+        project_data = response.json().get("projects", [{}])[0] 
         self.assertEqual(project_data["id"], str(project_id))
         self.assertEqual(project_data["title"], data["title"])
         self.assertEqual(project_data["description"], data["description"])
@@ -88,7 +83,6 @@ class TestAPIProjects(unittest.TestCase):
 
     def test_put_project_expected_behavior(self):
         """Test expected behavior: only specified fields should be updated, others remain unchanged."""
-        # Create a project with full details
         project_data = {
             "title": "Initial Project",
             "description": "Original description",
@@ -96,17 +90,11 @@ class TestAPIProjects(unittest.TestCase):
             "active": True
         }
         project_id = self.create_project(project_data)
-
-        # Update only the 'title' field
         updated_data = {"title": "Updated Project"}
         put_response = requests.put(f"{self.BASE_URL}/projects/{project_id}", json=updated_data, headers=self.json_headers)
         self.assertEqual(200, put_response.status_code, "Expected status code 200 for successful update.")
-
-        # Fetch the updated project
         updated_project_response = requests.get(f"{self.BASE_URL}/projects/{project_id}", headers=self.json_headers)
-        updated_project = updated_project_response.json()["projects"][0]  # Access the nested project
-
-        # Verify that only 'title' was updated
+        updated_project = updated_project_response.json()["projects"][0] 
         self.assertEqual(updated_project["title"], "Updated Project")
         self.assertEqual(updated_project["description"], "Original description", "Expected 'description' to remain unchanged.")
         self.assertEqual(updated_project["completed"], "false", "Expected 'completed' to remain unchanged.")
@@ -114,7 +102,6 @@ class TestAPIProjects(unittest.TestCase):
 
     def test_put_project_actual_behavior(self):
         """Observed behavior: Unspecified fields are reset or removed upon update."""
-        # Create a project with full details
         project_data = {
             "title": "Initial Project",
             "description": "Original description",
@@ -122,20 +109,12 @@ class TestAPIProjects(unittest.TestCase):
             "active": True
         }
         project_id = self.create_project(project_data)
-
-        # Update only the 'title' field
         updated_data = {"title": "Updated Project"}
         put_response = requests.put(f"{self.BASE_URL}/projects/{project_id}", json=updated_data, headers=self.json_headers)
         self.assertEqual(200, put_response.status_code)
-
-        # Fetch the updated project
         updated_project_response = requests.get(f"{self.BASE_URL}/projects/{project_id}", headers=self.json_headers)
         updated_project = updated_project_response.json()["projects"][0]
-
-        # Check for unexpected modifications or deletions
         self.assertEqual(updated_project["title"], "Updated Project")
-        
-        # Verifying actual (unexpected) behavior
         self.assertEqual(updated_project["completed"], "false", "Unexpected behavior: 'completed' field was modified.")
         self.assertEqual(updated_project["active"], "false", "Unexpected behavior: 'active' field was modified.")
 
@@ -155,32 +134,21 @@ class TestAPIProjects(unittest.TestCase):
     # Tests for /projects/:id/tasks and /projects/:id/categories
     def test_get_project_tasks_expected_behavior(self):
         """Test actual behavior: retrieving tasks for an invalid project ID."""
-        non_existent_project_id = "999999999"  # An ID we know does not exist
-        
-        # Attempt to retrieve tasks for the non-existent project ID
+        non_existent_project_id = "999999999" 
+    
         response = requests.get(f"{self.BASE_URL}/projects/{non_existent_project_id}", headers=self.json_headers)
-        
-        # Check if the response returns a 404 status code
         self.assertEqual(404, response.status_code, "Expected status code 404 for non-existent project ID.")
         
         response = requests.get(f"{self.BASE_URL}/projects/{non_existent_project_id}/tasks", headers=self.json_headers)
-        
-        # Check if the response returns a 404 status code
         self.assertEqual(200, response.status_code, "Expected status code 404 for non-existent project ID.")
         
     def test_get_project_tasks_actual_behavior(self):
         """Test actual behavior: retrieving tasks for a non-existent project ID."""
-        non_existent_project_id = "999999999"  # An ID we know does not exist
-        
-        # Attempt to retrieve tasks for the non-existent project ID
+        non_existent_project_id = "999999999" 
         response = requests.get(f"{self.BASE_URL}/projects/{non_existent_project_id}", headers=self.json_headers)
-        
-        # Check if the response returns a 404 status code
         self.assertEqual(404, response.status_code, "Expected status code 404 for non-existent project ID.")
         
         response = requests.get(f"{self.BASE_URL}/projects/{non_existent_project_id}/tasks", headers=self.json_headers)
-        
-        # Check if the response returns a 404 status code
         self.assertEqual(200, response.status_code, "Expected status code 404 for non-existent project ID.")
         
     def test_post_project_task_relationship(self):
