@@ -1,5 +1,7 @@
 import unittest
 import requests
+import subprocess
+import time
 import xml.etree.ElementTree as ET
 
 
@@ -14,6 +16,22 @@ class TestAPITodos(unittest.TestCase):
     }
     created_todo_ids = []
     created_categories_ids = []
+
+    @classmethod
+    def setUpClass(cls):
+        cls.process = subprocess.Popen(['java', '-jar', 'runTodoManagerRestAPI-1.5.5.jar'])
+        time.sleep(5)  # Wait a few seconds for the server to start
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.process.terminate()
+
+    def test_service_is_running(self):
+        try:
+            response = requests.get('http://localhost:4567/')
+            self.assertEqual(response.status_code, 200)
+        except requests.exceptions.ConnectionError:
+            self.fail("Service is not running!")
 
     def tearDown(self):
         """ Delete todos created for the test """
@@ -126,6 +144,89 @@ class TestAPITodos(unittest.TestCase):
         response = requests.post(f"{self.BASE_URL}/todos/{todo_id}/categories", json=todo_category_link_data,
                                  headers=self.json_headers)
         self.assertEqual(201, response.status_code)
+
+    def test_get_todo_by_id_json(self):
+        title = "Test Todo"
+        todo_data = {
+            "title": title,
+        }
+        todo_id = self.create_todo(todo_data)
+        response = requests.get(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.headers['Content-Type'], "application/json")
+        todos = response.json()['todos']
+        titles = [todo['title'] for todo in todos]
+        self.assertIn(title, titles, f"Todo with title '{title}' was not found")
+
+    def test_post_todo_by_id_empty_field_documented(self):
+        # Will break
+        title = "Todo title"
+        todo_data = {
+            "title": title,
+        }
+        todo_id = self.create_todo(todo_data)
+        response = requests.put(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
+        self.assertEqual(400, response.status_code)
+        self.assertEqual(response.headers['Content-Type'], "application/json")
+
+    def test_post_todo_by_id_empty_field_observed(self):
+        # Let the user post the amend with no body
+        title = "Todo title"
+        todo_data = {
+            "title": title,
+        }
+        todo_id = self.create_todo(todo_data)
+        response = requests.put(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.headers['Content-Type'], "application/json")
+        titles = response.json()['title']
+        self.assertIn(title, titles, f"Todo with title '{titles}' was not found")
+
+    def test_post_todo_by_id_json(self):
+        title = "Todo title"
+        new_title = "New title"
+        todo_data = {
+            "title": title,
+        }
+        new_todo_data = {
+            "title": new_title
+        }
+        todo_id = self.create_todo(todo_data)
+        response = requests.post(f"{self.BASE_URL}/todos/{todo_id}", json=new_todo_data, headers=self.json_headers)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.headers['Content-Type'], "application/json")
+        titles = response.json()['title']
+        self.assertIn(new_title, titles, f"Todo with title '{titles}' was not found")
+
+    def test_put_todo_by_id_json(self):
+        title = "Todo title"
+        new_title = "New title"
+        todo_data = {
+            "title": title,
+        }
+        new_todo_data = {
+            "title": new_title
+        }
+        todo_id = self.create_todo(todo_data)
+        response = requests.put(f"{self.BASE_URL}/todos/{todo_id}", json=new_todo_data, headers=self.json_headers)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.headers['Content-Type'], "application/json")
+        titles = response.json()['title']
+        self.assertIn(new_title, titles, f"Todo with title '{titles}' was not found")
+
+    def test_delete_todo_by_id_json(self):
+        title = "Test Todo"
+        todo_data = {
+            "title": title,
+        }
+        todo_id = self.create_todo(todo_data)
+        response = requests.delete(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
+        self.created_todo_ids.remove(str(todo_id))
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(response.headers['Content-Type'], "application/json")
+
+        response = requests.get(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
+        self.assertEqual(404, response.status_code)
 
     def test_get_categories_related_to_todo_documented(self):
         # This test is expected to fail, because it doesn't see the relationship created from category side
