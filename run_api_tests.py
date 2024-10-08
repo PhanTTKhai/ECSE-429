@@ -1,12 +1,15 @@
-import unittest
 import random
-import requests
 import subprocess
 import time
+import unittest
 
-# Import all test modules
-from test_api_todos import TestAPITodos
+import requests
+
+# Imports modules
+from test_api_interoperability import TestAPIInteroperability
+from test_api_categories import TestAPICategories
 from test_api_projects import TestAPIProjects
+from test_api_todos import TestAPITodos
 
 SERVER_URL = "http://localhost:4567"
 
@@ -35,6 +38,8 @@ def suite():
 
     test_suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestAPITodos))
     test_suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestAPIProjects))
+    test_suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestAPICategories))
+    test_suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestAPIInteroperability))
 
     test_list = list(test_suite)
     random.shuffle(test_list)

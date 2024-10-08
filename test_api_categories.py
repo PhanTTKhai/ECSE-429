@@ -1,16 +1,14 @@
 import unittest
+
 import requests
-import xml.etree.ElementTree as ET
-import subprocess
-import time
 
 BASE_URL = "http://localhost:4567"
 JSON_HEADERS = {
     "Accept": "application/json"
 }
 
+
 class TestAPICategories(unittest.TestCase):
-    
     created_cat_ids = []
     created_todo_ids = []
 
@@ -38,7 +36,7 @@ class TestAPICategories(unittest.TestCase):
                 raise Exception("Unexpected response format or missing 'id' field")
         else:
             raise Exception(f"Failed to create category: {response.status_code}")
-        
+
     def test_get_categories(self):
         """ Test GET /categories """
 
@@ -49,7 +47,7 @@ class TestAPICategories(unittest.TestCase):
 
     def test_post_category(self):
         """ Test POST /categories """
-        
+
         data = {
             "title": "Test Category 1",
             "description": "Test Category Description"
@@ -61,7 +59,8 @@ class TestAPICategories(unittest.TestCase):
 
         self.assertEqual(201, response.status_code)
         self.assertEqual(response.json()['title'], data['title'], "Returned title does not match the input title")
-        self.assertEqual(response.json()['description'], data['description'], "Returned description does not match the input description")
+        self.assertEqual(response.json()['description'], data['description'],
+                         "Returned description does not match the input description")
 
     def test_put_category(self):
         """ Test PUT /categories """
@@ -139,7 +138,8 @@ class TestAPICategories(unittest.TestCase):
         response1 = requests.put(f"{BASE_URL}/categories/{id}", json=data1, headers=JSON_HEADERS)
         self.assertEqual(200, response1.status_code)
         self.assertEqual(response1.json()['title'], data1['title'], "Returned title does not match the input title")
-        self.assertEqual(response1.json()['description'], data1['description'], "Returned description does not match the input description")
+        self.assertEqual(response1.json()['description'], data1['description'],
+                         "Returned description does not match the input description")
 
         response2 = requests.put(f"{BASE_URL}/categories/{id}", json=data2, headers=JSON_HEADERS)
         self.assertEqual(400, response2.status_code, "Expected 400 Bad Request when using PUT with empty body")
