@@ -69,8 +69,6 @@ class TestAPIInteroperability(unittest.TestCase):
     ### tests ###
 
     def test_delete_category_from_todo(self):
-        self.tearDown()
-
         todo_id = self.create_todo({"title": "Test Todo for delete"})
         category_id = self.create_category({"title": "Test Category for delete"})
         
