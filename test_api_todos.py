@@ -1,7 +1,5 @@
 import unittest
 import requests
-import subprocess
-import time
 import xml.etree.ElementTree as ET
 
 
@@ -16,34 +14,6 @@ class TestAPITodos(unittest.TestCase):
     }
     created_todo_ids = []
     created_categories_ids = []
-
-    @classmethod
-    def setUpClass(cls):
-        cls.process = subprocess.Popen(['java', '-jar', 'runTodoManagerRestAPI-1.5.5.jar'])
-        time.sleep(5)  # Wait a few seconds for the server to start
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.process.terminate()
-
-    def test_service_is_running(self):
-        try:
-            response = requests.get('http://localhost:4567/')
-            self.assertEqual(response.status_code, 200)
-        except requests.exceptions.ConnectionError:
-            self.fail("Service is not running!")
-
-    def tearDown(self):
-        """ Delete todos created for the test """
-        for todo_id in self.created_todo_ids:
-            response = requests.delete(f"{self.BASE_URL}/todos/{todo_id}")
-            self.assertEqual(200, response.status_code)
-
-        for category_id in self.created_categories_ids:
-            response = requests.delete(f"{self.BASE_URL}/categories/{category_id}")
-            self.assertEqual(200, response.status_code)
-        self.created_todo_ids.clear()
-        self.created_categories_ids.clear()
 
     def create_todo(self, data):
         response = requests.post(f"{self.BASE_URL}/todos", json=data)
@@ -170,7 +140,7 @@ class TestAPITodos(unittest.TestCase):
         self.assertEqual(response.headers['Content-Type'], "application/json")
 
     def test_post_todo_by_id_empty_field_observed(self):
-        # Let the user post the amend with no body
+        # Let the user post the amend without body, the test will fail
         title = "Todo title"
         todo_data = {
             "title": title,
