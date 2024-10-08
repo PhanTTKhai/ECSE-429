@@ -5,9 +5,8 @@ import unittest
 
 import requests
 
-# Imports modules
-from test_api_interoperability import TestAPIInteroperability
 from test_api_categories import TestAPICategories
+from test_api_interoperability import TestAPIInteroperability
 from test_api_projects import TestAPIProjects
 from test_api_todos import TestAPITodos
 
