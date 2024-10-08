@@ -1,6 +1,7 @@
 import unittest
 import requests
 
+
 class TestAPIProjects(unittest.TestCase):
     BASE_URL = "http://localhost:4567"
     json_headers = {
