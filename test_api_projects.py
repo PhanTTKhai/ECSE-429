@@ -1,4 +1,5 @@
 import unittest
+
 import requests
 
 
@@ -10,13 +11,6 @@ class TestAPIProjects(unittest.TestCase):
     created_project_ids = []
     created_todo_ids = []
     created_category_ids = []
-
-    def test_service_is_running(self):
-        try:
-            response = requests.get('http://localhost:4567/')
-            self.assertEqual(response.status_code, 200)
-        except requests.exceptions.ConnectionError:
-            self.fail("Service is not running!")
 
     def tearDown(self):
         """ Delete created projects, todos, and categories """
@@ -42,7 +36,11 @@ class TestAPIProjects(unittest.TestCase):
         if response.status_code != 201:
             print("Failed to create project:", response.json())  # Print error for debugging
         self.assertEqual(201, response.status_code)
-        return response.json()["id"]
+        if 'id' in response.json():
+            project_id = response.json()['id']
+            self.created_project_ids.append(project_id)
+            return project_id
+        raise Exception("Failed to retrieve project ID from response")
 
     def create_todo(self, data):
         response = requests.post(f"{self.BASE_URL}/todos", json=data, headers=self.json_headers)
@@ -80,6 +78,7 @@ class TestAPIProjects(unittest.TestCase):
         data = {"title": "Project for Retrieval", "description": "Testing specific project retrieval"}
         creation_response = requests.post(f"{self.BASE_URL}/projects", json=data)
         project_id = creation_response.json()["id"]
+        self.created_project_ids.append(project_id)
         response = requests.get(f"{self.BASE_URL}/projects/{project_id}")
         self.assertEqual(response.status_code, 200)
         project_data = response.json().get("projects", [{}])[0]

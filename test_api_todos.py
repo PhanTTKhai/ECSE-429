@@ -1,6 +1,7 @@
 import unittest
-import requests
 import xml.etree.ElementTree as ET
+
+import requests
 
 
 class TestAPITodos(unittest.TestCase):
@@ -13,7 +14,20 @@ class TestAPITodos(unittest.TestCase):
         "Content-Type": "application/xml"
     }
     created_todo_ids = []
-    created_categories_ids = []
+    created_category_ids = []
+
+    def tearDown(self):
+        """ Delete created todos, and categories """
+        for todo_id in self.created_todo_ids:
+            response = requests.delete(f"{self.BASE_URL}/todos/{todo_id}", headers=self.json_headers)
+            if response.status_code != 404:
+                self.assertEqual(200, response.status_code)
+        for category_id in self.created_category_ids:
+            response = requests.delete(f"{self.BASE_URL}/categories/{category_id}", headers=self.json_headers)
+            if response.status_code != 404:
+                self.assertEqual(200, response.status_code)
+        self.created_todo_ids.clear()
+        self.created_category_ids.clear()
 
     def create_todo(self, data):
         response = requests.post(f"{self.BASE_URL}/todos", json=data)
@@ -34,7 +48,7 @@ class TestAPITodos(unittest.TestCase):
         if response.status_code == 201:
             try:
                 category_id = response.json()['id']
-                self.created_categories_ids.append(category_id)
+                self.created_category_ids.append(category_id)
                 return int(category_id)
             except (KeyError, ValueError):
                 raise Exception("Unexpected response format or missing 'id' field")
