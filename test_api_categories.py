@@ -45,6 +45,7 @@ class TestAPICategories(unittest.TestCase):
         self.assertIn("categories", response.json(), "Expected 'categories' field in response")
         self.assertIsInstance(response.json()['categories'], list, "Expected 'categories' field to be a list")
 
+
     def test_post_category(self):
         """ Test POST /categories """
 
@@ -87,6 +88,12 @@ class TestAPICategories(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(len(category_list), 1, "Expected exactly one category to be returned")
         self.assertEqual(int(category_list[0]['id']), id, "Returned id does not match the input id")
+
+    def test_get_category_id_false(self):
+        """ Test GET /categories/:id with non-existant category id """
+
+        response = requests.get(f"{BASE_URL}/categories/0", headers=JSON_HEADERS)
+        self.assertEqual(404, response.status_code)
 
     def test_post_category_id(self):
         """ Test POST /categories/:id """
@@ -184,6 +191,33 @@ class TestAPICategories(unittest.TestCase):
         self.assertIsInstance(response3.json()['todos'], list, "Expected 'todos' field to be a list")
         self.assertEqual(len(response3.json()['todos']), 1, "Expected exactly one todo to be returned")
         self.assertEqual(int(response3.json()['todos'][0]['id']), todo_id, "Returned todo id does not match the input todo id")
+
+    def test_get_categories_id_todos_empty(self):
+        """ Test GET /categories/:id/todos with non-existant category id """
+
+        cat_id = self.create_category({
+            "title": "Test Category 9",
+        })
+
+        todo_data = {
+            "title": "Todo Test"
+        }
+
+        response1 = requests.post(f"{BASE_URL}/todos", json=todo_data, headers=JSON_HEADERS)
+        self.assertEqual(201, response1.status_code)
+        todo_id = int(response1.json()['id'])
+        self.created_todo_ids.append(todo_id)
+
+        # Create the real relationship        
+        response2 = requests.post(f"{BASE_URL}/categories/{cat_id}/todos", json={"id": str(todo_id)}, headers=JSON_HEADERS)
+        self.assertEqual(201, response2.status_code)
+
+        # Get that todo from a non-existant category (id 0) to show it returns everything instead of nothing
+        response3 = requests.get(f"{BASE_URL}/categories/0/todos", headers=JSON_HEADERS)
+        self.assertEqual(200, response3.status_code)
+        self.assertIn("todos", response3.json(), "Expected 'todos' field in response")
+        self.assertIsInstance(response3.json()['todos'], list, "Expected 'todos' field to be a list")
+        self.assertEqual(len(response3.json()['todos']), 0, "Expected zero todo items to be returned")
 
     def test_put_categories_id_todos(self):
         """ Test PUT /categories/:id/todos """
