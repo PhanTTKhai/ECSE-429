@@ -212,7 +212,8 @@ class TestAPICategories(unittest.TestCase):
         response2 = requests.post(f"{BASE_URL}/categories/{cat_id}/todos", json={"id": str(todo_id)}, headers=JSON_HEADERS)
         self.assertEqual(201, response2.status_code)
 
-        # Get that todo from a non-existant category (id 0) to show it returns everything instead of nothing
+        # Get that todo from a non-existant category (id 0) 
+        # to show it returns that newly created relationship instead of nothing
         response3 = requests.get(f"{BASE_URL}/categories/0/todos", headers=JSON_HEADERS)
         self.assertEqual(200, response3.status_code)
         self.assertIn("todos", response3.json(), "Expected 'todos' field in response")
