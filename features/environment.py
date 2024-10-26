@@ -29,4 +29,12 @@ def after_scenario(context, scenario):
                 print(f"Deleted todo with ID: {todo_id}")
             else:
                 print(f"Failed to delete todo with ID: {todo_id}. Status: {response.status_code}")
-
+    
+    if hasattr(context, 'project_created_responses'):
+        for project in context.project_created_responses:
+            project_id = project.json().get('id')
+            response = requests.delete(f"{context.api_url}/projects/{project_id}")
+            if response.status_code in [200, 204]:
+                print(f"\tDeleted project with ID: {project_id}")
+            else:
+                print(f"Failed to delete project with ID: {project_id}. Status: {response.status_code}")
