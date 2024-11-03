@@ -16,7 +16,7 @@ Feature: Delete a Category
       | 3           |
       | 4           |
 
-  Scenario Outline: Scenario Outline name: User attempts to delete a non-existent category (Error Flow)
+  Scenario Outline: User attempts to delete a non-existent category (Error Flow)
     When the user sends a DELETE request to /categories/<non_existent_id>
     Then the API responds with status code 404 (Not Found)
     And the response body contains "errorMessages" of "Category not found"

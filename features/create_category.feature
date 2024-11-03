@@ -18,13 +18,13 @@ Feature: Create a New Category
       | Exercise   |
 
   Scenario Outline: User creates a new category with description (Alternative Flow)
-    When the user sends a POST request to /categories with the name "<name>" and description "<description>"
+    When the user sends a POST request to /categories with the title "<title>" and description "<description>"
     Then the API responds with status code 201 (Created)
-    And the response body contains "name" of "<name>"
+    And the response body contains "title" of "<title>"
     Then the system saves the category
 
     Examples:
-      | name       | description           |
+      | title       | description           |
       | Work       | "Tasks for work"      |
       | Personal   | "Personal activities" |
       | Shopping   | "Groceries and items" |

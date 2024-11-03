@@ -10,7 +10,7 @@ Feature: View All Todos of a Category
     And the response body contains a list of all todos associated with the category ID "<category_id>"
 
 
-  Scenario: User views todos of a non-existent category (Error Flow)
+  Scenario Outline: User views todos of a non-existent category (Error Flow)
     When the user sends a GET request to /categories/<non_existent_id>/todos
     Then the API responds with status code 404 (Not Found)
     And the response body contains "errorMessages" of "Category not found"
