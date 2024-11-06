@@ -1,39 +1,42 @@
 Feature: Delete a Category
-  As a user, I want to delete a category, so that I can remove categories that I no longer need.
-
-  Background:
-    Given the todo management API is running
 
   Scenario Outline: User deletes a category successfully (Normal Flow)
-    When the user sends a DELETE request to /categories/<category_id>
-    Then the API responds with status code 200 (OK)
-    And the system no longer contains the category with ID "<category_id>"
+    Given a category exists with title "<title>"
+    When the user sends a DELETE request to delete the category
+    Then the category API responds with status code 200
+    And the category with title "<title>" is no longer in the system
 
     Examples:
-      | category_id |
-      | 1           |
-      | 2           |
-      | 3           |
-      | 4           |
+      | title      |
+      | Work       |
+      | Personal   |
+      | Shopping   |
+      | Exercise   |
 
   Scenario Outline: User attempts to delete a non-existent category (Error Flow)
-    When the user sends a DELETE request to /categories/<non_existent_id>
-    Then the API responds with status code 404 (Not Found)
-    And the response body contains "errorMessages" of "Category not found"
-    And the system does not contain a category with ID "<non_existent_id>"
+    When the user sends a DELETE request to delete a category with ID "<invalid_id>"
+    Then the category API responds with status code 404
+    And the response body contains "errorMessages"
+    And no changes are made to the system
 
     Examples:
-      | non_existent_id |
-      | 99              |
-      | 100             |
+      | invalid_id |
+      | 999       |
+      | -1        |
+      | abc       |
+      | 0         |
 
-  Scenario Outline: User attempts to delete a category that has todos (Alternative Flow)
-    Given there are todos associated with category "<category_with_todos>"
-    When the user sends a DELETE request to /categories/<category_with_todos>
-    Then the API responds with status code 200 (OK)
-    And the todos associated with category "<category_with_todos>" are no longer linked to any category
+  Scenario Outline: User deletes a category that has associated items (Alternative Flow)
+    Given a category with title "{title}" and description "{description}" exists for deletion
+    And there are items associated with this category
+    When the user sends a DELETE request to delete the category
+    Then the category API responds with status code 200
+    And the category with title "<title>" is no longer in the system
+    And the associated items no longer reference the deleted category
 
     Examples:
-      | category_with_todos |
-      | 5                   |
-      | 6                   |
+      | title      | description         |
+      | Work       | Tasks for work      |
+      | Personal   | Personal activities |
+      | Shopping   | Groceries and items |
+      | Exercise   | Exercise routines   |

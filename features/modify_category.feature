@@ -12,10 +12,10 @@ Feature: Modify a Category
 
     Examples:
       | category_id | new_title   | new_description        |
-      | 1           | Work Tasks | "Updated work tasks"   |
-      | 2           | Personal   | "Updated personal info"|
-      | 3           | Fitness    | "Updated fitness goals"|
-      | 4           | Shopping   | "Updated shopping list"|
+      | 1           | Work Tasks | Updated work tasks   |
+      | 2           | Personal   | Updated personal info|
+      | 3           | Fitness    | Updated fitness goals|
+      | 4           | Shopping   | Updated shopping list|
 
   Scenario Outline: User attempts to modify a non-existent category (Error Flow)
     When the user sends a PUT request to /categories/<non_existent_id> with the new title "Updated Title"
