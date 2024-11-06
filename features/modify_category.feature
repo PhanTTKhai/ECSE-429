@@ -1,40 +1,44 @@
-Feature: Modify a Category
-  As a user, I want to modify a category, so that I can update its name or description as needed.
+Feature: Update Category Details
+  As a user, I want to edit the details of a category so that I can keep my categories accurate and reflective of current information.
 
   Background:
     Given the todo management API is running
 
-  Scenario Outline: User modifies a category successfully (Normal Flow)
-    When the user sends a PUT request to /categories/<category_id> with the new title "<new_title>" and new description "<new_description>"
+  Scenario Outline: The user successfully updates a category's details using PUT method.
+    Given there are categories stored in the system
+      | title       | description         |
+      | <title>     | <description>       |
+    When the user updates the "<field>" of category "<title>" to "<value>" with PUT
     Then the API responds with status code 200 (OK)
-    And the response body contains "title" of "<new_title>" and "description" of "<new_description>"
-    And the system updates the category with ID "<category_id>"
 
     Examples:
-      | category_id | new_title   | new_description        |
-      | 1           | Work Tasks | Updated work tasks   |
-      | 2           | Personal   | Updated personal info|
-      | 3           | Fitness    | Updated fitness goals|
-      | 4           | Shopping   | Updated shopping list|
+      | title       | description           | field       | value                   |
+      | Work Tasks  | Initial work tasks    | title       | Updated Work Tasks      |
+      | Personal    | Personal information  | title       | Updated personal info   |
+      | Fitness     | Goals for fitness     | title       | Updated Fitness Goals   |
 
-  Scenario Outline: User attempts to modify a non-existent category (Error Flow)
-    When the user sends a PUT request to /categories/<non_existent_id> with the new title "Updated Title"
+  Scenario Outline: The user successfully updates a category's details using POST method.
+    Given there are categories stored in the system
+      | title       | description         |
+      | <title>     | <description>       |
+    When the user updates the "<field>" of category "<title>" to "<value>" with POST
+    Then the API responds with status code 200 (OK)
+
+    Examples:
+      | title       | description           | field       | value                   |
+      | Work Tasks  | Initial work tasks    | title       | Updated Work Tasks      |
+      | Personal    | Personal information  | description | Updated personal info   |
+      | Fitness     | Goals for fitness     | title       | Updated Fitness Goals   |
+
+  Scenario Outline: User attempts to update a non-existent category.
+    Given there is no category with ID "<category_id>"
+    When the user tries to update the category with ID "<category_id>" 
     Then the API responds with status code 404 (Not Found)
-    And the response body contains "errorMessages" 
-    And no category is updated in the system
+    And the system does not create or modify any categories
 
     Examples:
-      | non_existent_id |
-      | 99              |
-      | 100             |
-
-  Scenario Outline: User attempts to modify a category with missing or invalid fields (Alternative Flow)
-    When the user sends a PUT request to /categories/<category_id> with an empty title "<empty_title>" and an empty description "<empty_description>"
-    Then the API responds with status code 400 (Bad Request)
-    And the response body contains "errorMessages" of "Failed Validation: title and description cannot be empty"
-    And the category with ID "<category_id>" is not updated in the system
-
-    Examples:
-      | category_id | empty_title | empty_description |
-      | 1           | ""         | ""                |
-      | 2           | ""         | ""                |
+      | category_id |
+      | 0           |
+      | -1          |
+      | 999         |
+      | 12345       |

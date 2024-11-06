@@ -15,8 +15,8 @@ Feature: View All Categories
     Then the API responds with status code 200 (OK)
     And the response body contains an empty list
 
-  Scenario: API error when viewing categories (Error Flow)
-    Given the API is experiencing an issue
-    When the user sends a GET request to /categories
-    Then the API responds with status code 500 (Internal Server Error)
-    And the response body contains "errorMessages" of "Internal Server Error"
+  Scenario: User sends an invalid request to view all categories
+    Given the todo management API is running
+    When the user sends an invalid GET request to /invalid/categories
+    Then the API responds with status code 404 (Not Found)
+
