@@ -1,4 +1,7 @@
 Feature: Create a New Category
+    As a user, I want to create a new category so that I can keep track of my todos and projects effectively
+  Background:
+    Given the todo management API is running
 
   Scenario Outline: User creates a new category successfully (Normal Flow)
     When the user submits a POST request to create a category with the title "<title>"

@@ -14,7 +14,7 @@ Feature: Update Category Details
     Examples:
       | title       | description           | field       | value                   |
       | Work Tasks  | Initial work tasks    | title       | Updated Work Tasks      |
-      | Personal    | Personal information  | title       | Updated personal info   |
+      | Personal    | Personal information  | description | Updated personal info   |
       | Fitness     | Goals for fitness     | title       | Updated Fitness Goals   |
 
   Scenario Outline: The user successfully updates a category's details using POST method.

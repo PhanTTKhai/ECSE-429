@@ -1,4 +1,8 @@
 Feature: Delete a Category
+As a user, I want to create a new category so that I can keep track of my todos and projects effectively
+
+  Background:
+    Given the todo management API is running
 
   Scenario Outline: User deletes a category successfully (Normal Flow)
     Given a category exists with title "<title>"

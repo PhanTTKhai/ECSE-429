@@ -451,7 +451,6 @@ def step_update_category_by_id(context, category_id):
         headers=headers
     )
     
-
 @when('the user sends a GET request to /categories')
 def step_get_all_categories(context):
     context.response = requests.get(f"{context.api_url}/categories")
@@ -471,16 +470,23 @@ def step_check_response_for_categories(context):
 
 @given('there are no categories in the system')
 def clear_categories(context):
-    # Ensure the response body contains the 'categories' key
-    response_json = context.response.json()
+    # Get all categories
+    response = requests.get(f"{context.api_url}/categories")
+    assert response.status_code == 200, f"Failed to retrieve categories. Status code: {response.status_code}"
     
-    # Check if 'categories' is a key in the response and its value is a list
+    # Parse response and delete each category individually if any exist
+    categories = response.json().get("categories", [])
+    for category in categories:
+        category_id = category.get("id")
+        delete_response = requests.delete(f"{context.api_url}/categories/{category_id}")
+        assert delete_response.status_code == 200, f"Failed to delete category {category_id}. Status code: {delete_response.status_code}"
+    
+    # Verify that all categories have been deleted
+    response = requests.get(f"{context.api_url}/categories")
+    response_json = response.json()
     assert 'categories' in response_json, "Response body does not contain 'categories' key"
     assert isinstance(response_json['categories'], list), "Categories is not a list"
-    
-    # Optionally, you can also check if the list contains at least one category
-    assert len(response_json['categories']) > 0, "Categories list is empty"
-    
+    assert len(response_json['categories']) == 0, "Categories list is not empty"
 
 @then('the response body contains an empty list')
 def step_check_empty_list(context):
