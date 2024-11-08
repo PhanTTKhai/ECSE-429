@@ -4,6 +4,7 @@ import json
 import requests
 from behave import when, then, given
 
+
 # Update Project Feature
 @given('a project with title "{title}" exists')
 def step_impl(context, title):
@@ -212,35 +213,39 @@ def step_impl(context):
 
 @given('tasks are associated with the project')
 def step_impl(context):
-    assert hasattr(context, 'project_id'), "Project ID not found in context."
+    # Ensure the project ID is available in the context
+    assert hasattr(context, 'project_id'), "Project ID not found in context. Ensure the project was created in a previous step."
     
-    # Check if tasks are already associated with the project
+    # Check if there are tasks associated with the project
     response = requests.get(f"{context.api_url}/projects/{context.project_id}/tasks")
     assert response.status_code == 200, f"Failed to retrieve tasks for project {context.project_id}. Status: {response.status_code}"
     
     tasks = response.json().get("tasks", [])
 
     if not tasks:
-        # No tasks are associated, so create and associate a new task
+        # No tasks are associated, so create a new task
         payload = {
             "title": "Associated Task",
             "description": "Task automatically created and associated with the project"
         }
         headers = {'Content-Type': 'application/json'}
         
-        # Create a new task
+        # Create the task
         task_response = requests.post(f"{context.api_url}/todos", json=payload, headers=headers)
         assert task_response.status_code == 201, f"Failed to create a task. Status: {task_response.status_code}"
         
+        # Extract the created task ID
         task_id = task_response.json().get("id")
         
-        # Associate the newly created task with the project
-        assoc_response = requests.post(f"{context.api_url}/projects/{context.project_id}/tasks/{task_id}")
+        # Associate the task with the project by including task_id in the body
+        assoc_payload = {"task_id": task_id}
+        assoc_response = requests.post(f"{context.api_url}/projects/{context.project_id}/tasks", json=assoc_payload, headers=headers)
         assert assoc_response.status_code == 200, f"Failed to associate task {task_id} with project {context.project_id}. Status: {assoc_response.status_code}"
         
         print(f"Task with ID {task_id} created and associated with project {context.project_id}.")
     else:
         print(f"Project {context.project_id} already has tasks associated.")
+
 
 @when('the user sends a DELETE request using the corresponding projects id')
 def step_impl(context):
