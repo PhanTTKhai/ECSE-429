@@ -15,6 +15,8 @@ def find_feature_files(directory):
 def run_feature_file(feature_file):
     print(f"Running feature: {feature_file}")
     # Might need to change this line to only work with behave 
+
+    # result = subprocess.run(["behave", feature_file], capture_output=True, text=True)
     result = subprocess.run(["python3", "-m", "behave", feature_file], capture_output=True, text=True)
     
 
