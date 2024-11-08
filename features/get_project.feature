@@ -16,10 +16,10 @@ Feature: View a Project
       | title              |
       | "Project to Get" |
 
-  Scenario Outline: User retrieves a project by accessing an associated todo (Alternate Flow)
+  Scenario Outline: User retrieves a project by accessing an associated tasks (Alternate Flow)
     Given a project with title "<title>" exists
-    And todos are associated with the project
-    When the user sends a GET request to retrieve the project through the todo's project association
+    And tasks are associated with the project
+    When the user sends a GET request to retrieve the project through the tasks' project association
     Then the API responds with status code 200 (OK)
     And the response body confirms the correct id and corresponding title
 

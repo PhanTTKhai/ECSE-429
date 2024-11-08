@@ -15,12 +15,12 @@ Feature: Delete a Project
       | title              |
       | "Project to Delete" |
 
-  Scenario Outline: User attempts to delete a project with associated todos (Alternate Flow)
+  Scenario Outline: User attempts to delete a project with associated tasks (Alternate Flow)
     Given a project with title <title> exists
-    And todos are associated with the project
+    And tasks are associated with the project
     When the user sends a DELETE request using the corresponding projects id
     Then the API responds with status code 200 (OK)
-    And the system removes the project and its associated todos from the database
+    And the system removes the project and its associated tasks from the database
 
     Examples:
       | title                |

@@ -210,33 +210,37 @@ def step_impl(context):
     assert response.status_code == 200, f"Failed to retrieve initial projects list. Status: {response.status_code}"
     context.initial_projects = response.json().get("projects", [])
 
-@given('todos are associated with the project')
+@given('tasks are associated with the project')
 def step_impl(context):
     assert hasattr(context, 'project_id'), "Project ID not found in context."
     
-    response = requests.get(f"{context.api_url}/projects/{context.project_id}/todos")
-    assert response.status_code == 200, f"Failed to retrieve todo for project {context.project_id}. Status: {response.status_code}"
+    # Check if tasks are already associated with the project
+    response = requests.get(f"{context.api_url}/projects/{context.project_id}/tasks")
+    assert response.status_code == 200, f"Failed to retrieve tasks for project {context.project_id}. Status: {response.status_code}"
     
-    todos = response.json().get("todos", [])
+    tasks = response.json().get("tasks", [])
 
-    if not todos:
+    if not tasks:
+        # No tasks are associated, so create and associate a new task
         payload = {
-            "title": "Associated Todo",
-            "description": "Todo automatically created and associated with the project"
+            "title": "Associated Task",
+            "description": "Task automatically created and associated with the project"
         }
         headers = {'Content-Type': 'application/json'}
         
-        todo_response = requests.post(f"{context.api_url}/todos", json=payload, headers=headers)
-        assert todo_response.status_code == 201, f"Failed to create a todo. Status: {todo_response.status_code}"
+        # Create a new task
+        task_response = requests.post(f"{context.api_url}/todos", json=payload, headers=headers)
+        assert task_response.status_code == 201, f"Failed to create a task. Status: {task_response.status_code}"
         
-        todo_id = todo_response.json().get("id")
+        task_id = task_response.json().get("id")
         
-        assoc_response = requests.post(f"{context.api_url}/projects/{context.project_id}/todos/{todo_id}")
-        assert assoc_response.status_code == 200, f"Failed to associate todo {todo_id} with project {context.project_id}. Status: {assoc_response.status_code}"
+        # Associate the newly created task with the project
+        assoc_response = requests.post(f"{context.api_url}/projects/{context.project_id}/tasks/{task_id}")
+        assert assoc_response.status_code == 200, f"Failed to associate task {task_id} with project {context.project_id}. Status: {assoc_response.status_code}"
         
-        print(f"Todo with ID {todo_id} created and associated with project {context.project_id}.")
+        print(f"Task with ID {task_id} created and associated with project {context.project_id}.")
     else:
-        print(f"Project {context.project_id} already has todos associated.")
+        print(f"Project {context.project_id} already has tasks associated.")
 
 @when('the user sends a DELETE request using the corresponding projects id')
 def step_impl(context):
@@ -287,6 +291,28 @@ def step_impl(context):
         f"Expected projects: {context.initial_projects}, but got: {current_projects}"
     )
 
+@then("the system removes the project and its associated tasks from the database")
+def step_impl(context):
+    # Ensure the project ID is available in the context
+    assert hasattr(context, 'project_id'), "Project ID not found in context. Ensure the project was created and stored in a previous step."
+    
+    # Verify that the project has been deleted
+    project_response = requests.get(f"{context.api_url}/projects/{context.project_id}")
+    assert project_response.status_code == 404, (
+        f"Expected project with ID {context.project_id} to be deleted, but it was found with status code {project_response.status_code}."
+    )
+    
+    # Verify that each associated task has been deleted
+    assert hasattr(context, 'task_ids'), "Task IDs not found in context. Ensure tasks were associated with the project."
+    for task_id in context.task_ids:
+        task_response = requests.get(f"{context.api_url}/tasks/{task_id}")
+        assert task_response.status_code == 404, (
+            f"Expected task with ID {task_id} to be deleted, but it was found with status code {task_response.status_code}."
+        )
+    
+    print(f"Project {context.project_id} and all associated tasks have been successfully removed from the database.")
+
+
 # Get Steps Features
 
 @when('the user sends a GET request to with the corresponding projects id')
@@ -319,18 +345,20 @@ def step_impl(context, id):
     
     context.project_id = id
 
-@when("the user sends a GET request to retrieve the project through the todo's project association")
+@when("the user sends a GET request to retrieve the project through the tasks' project association")
 def step_impl(context):
+    # Ensure that project ID and at least one associated task are set in context
     assert hasattr(context, "project_id"), "Project ID is not set in context."
-    assert hasattr(context, "todo_id"), "todo ID is not set in context."
+    assert hasattr(context, "task_id"), "Task ID is not set in context."
 
-    todo_url = f"{context.api_url}/todos/{context.todo_id}/project"
-    context.response = requests.get(todo_url)
+    # Send GET request to retrieve the project through the task's project association
+    task_url = f"{context.api_url}/tasks/{context.task_id}/project"
+    context.response = requests.get(task_url)
 
+    # Confirm that the request was successful
     assert context.response.status_code == 200, (
         f"Expected status code 200, but got {context.response.status_code}."
     )
-
 
 # View All Projects Step Features
 
