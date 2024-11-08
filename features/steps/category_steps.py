@@ -18,6 +18,9 @@ def step_create_category_with_title_and_description(context, title, description)
         json=payload,
         headers=headers
     )
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+    context.category_created_responses.append(context.response)
 
 @when('the user submits a POST request to create a category with the title "{title}"')
 def step_create_category_with_title(context, title):
@@ -33,6 +36,9 @@ def step_create_category_with_title(context, title):
         json=payload,
         headers=headers
     )
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+    context.category_created_responses.append(context.response)
 
 @then('the category API responds with status code {status_code:d}')
 def step_verify_response_status(context, status_code):
@@ -174,6 +180,7 @@ def step_create_category_for_deletion(context, title):
     
     context.title = title
 
+
 @given('a category with title "{title}" and description "{description}" exists for deletion')
 def step_create_category_with_description_for_deletion(context, title, description):
     # First create a category with description to be deleted
@@ -222,10 +229,12 @@ def step_create_items_for_category(context):
 @when('the user sends a DELETE request to delete the category')
 def step_delete_category(context):
     headers = {'Content-Type': 'application/json'}
-    context.response = requests.delete(
-        f"{context.api_url}/categories/{context.category_id}",
-        headers=headers
-    )
+    delete_url = f"{context.api_url}/categories/{context.category_id}"
+
+    context.response = requests.delete(delete_url, headers=headers)
+
+    # Assert the expected response status code
+    assert context.response.status_code in [200, 204], f"Category deletion failed. Status: {context.response.status_code}, Response: {context.response.text}"
 
 @when('the user sends a DELETE request to delete a category with ID "{invalid_id}"')
 def step_delete_invalid_category(context, invalid_id):
@@ -279,6 +288,10 @@ def step_modify_category_with_title_and_description(context, category_id, new_ti
         json=payload,
         headers=headers
     )
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+    context.category_created_responses.append(context.response)
+
 
 @when('the user submits a PUT request to update the category with ID "{category_id}" to have an empty title "{empty_title}" and an empty description "{empty_description}"')
 def step_modify_category_with_empty_fields(context, category_id, empty_title, empty_description):
@@ -297,6 +310,10 @@ def step_modify_category_with_empty_fields(context, category_id, empty_title, em
         json=payload,
         headers=headers
     )
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+    context.category_created_responses.append(context.response)
+
 
 @then('the response body confirms "description" as "{expected_description}"')
 def step_verify_response_description(context, expected_description):
@@ -387,6 +404,10 @@ def step_update_category_with_put(context, field, title, value):
         json=payload,
         headers=headers
     )
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+    context.category_created_responses.append(context.response)
+
 
 
 @when('the user updates the "{field}" of category "{title}" to "{value}" with POST')
@@ -407,6 +428,10 @@ def step_update_category_with_post(context, field, title, value):
         json=payload,
         headers=headers
     )
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+    context.category_created_responses.append(context.response)
+
 @given('there is no category with ID "{category_id}"')
 def step_ensure_no_category_exists(context, category_id):
     response = requests.get(f"{context.api_url}/categories/{category_id}")
