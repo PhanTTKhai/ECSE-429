@@ -8,7 +8,7 @@ Feature: Update a Project
     Given a project with title <title> exists
     When the user sends a POST request to the corresponding /projects/id with a new title "Updated Project"
     Then the API responds with status code 200 (Ok)
-    And the response body confirms "title" as "Updated Project"
+    And the project response body confirms "title" as "Updated Project"
     And the system updates the project
 
     Examples:
@@ -19,7 +19,7 @@ Feature: Update a Project
     Given a project with title <title> exists
     When the user sends a PUT request to the corresponding /projects/id with a new title "Amended Project"
     Then the API responds with status code 200 (Ok)
-    And the response body confirms "title" as "Amended Project"
+    And the project response body confirms "title" as "Amended Project"
     And the system updates the project
 
     Examples:

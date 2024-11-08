@@ -47,7 +47,7 @@ def step_impl(context, new_title):
     context.updated_title = new_title
 
 
-@then('the response body confirms "title" as "{expected_title}"')
+@then('the project response body confirms "title" as "{expected_title}"')
 def step_impl(context, expected_title):
     response_json = context.response.json()
     actual_title = response_json.get("title")
