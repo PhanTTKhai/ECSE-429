@@ -493,6 +493,31 @@ def step_check_response_for_categories(context):
     # Optionally, you can also check if the list contains at least one category
     assert len(response_json['categories']) > 0, "Categories list is empty"
 
+
+@given('there are categories in the system')
+def step_ensure_categories_exist(context):
+    # Initialize the list to store responses if not already done
+    if not hasattr(context, 'category_created_responses'):
+        context.category_created_responses = []
+
+    for row in context.table:
+        payload = {
+            "title": row["title"],
+            "description": row["description"]
+        }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(
+            f"{context.api_url}/categories",
+            json=payload,
+            headers=headers
+        )
+
+        assert response.status_code == 201, f"Failed to create category: {row['title']}, Status: {response.status_code}"
+
+        # Store the response in the context after ensuring it's created
+        context.category_created_responses.append(response)
+
+
 @given('there are no categories in the system')
 def clear_categories(context):
     # Get all categories

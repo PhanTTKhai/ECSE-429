@@ -5,6 +5,10 @@ Feature: View All Categories
     Given the todo management API is running
 
   Scenario: User views all categories successfully (Normal Flow)
+    Given there are categories in the system
+      | title      | description        |
+      | Category 1 | Description 1      |
+      | Category 2 | Description 2      |
     When the user sends a GET request to /categories
     Then the API responds with status code 200 (OK)
     And the response body contains a list of all categories
