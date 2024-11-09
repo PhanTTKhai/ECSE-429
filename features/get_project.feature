@@ -1,5 +1,5 @@
 Feature: View a Project
-  As a user, I want to view specific details of a project by ID.
+  As a user, I want to view specific details of a project.
 
   Background:
     Given the todo management API is running
