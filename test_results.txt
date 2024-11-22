@@ -1,0 +1,1194 @@
+Test Run Results
+====================
+
+Running feature: features/delete_category.feature
+Checking if the API is running...
+API is running.
+Feature: Delete a Category # features/delete_category.feature:1
+  As a user, I want to create a new category so that I can keep track of my todos and projects effectively
+  Background:   # features/delete_category.feature:4
+
+  Scenario Outline: User deletes a category successfully (Normal Flow) -- @1.1   # features/delete_category.feature:15
+    Given the todo management API is running                                     # features/steps/api_steps.py:4
+    Given a category exists with title "Work"                                    # features/steps/category_steps.py:157
+    When the user sends a DELETE request to delete the category                  # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                          # features/steps/category_steps.py:43
+    And the category with title "Work" is no longer in the system                # features/steps/category_steps.py:247
+
+  Scenario Outline: User deletes a category successfully (Normal Flow) -- @1.2   # features/delete_category.feature:16
+    Given the todo management API is running                                     # features/steps/api_steps.py:4
+    Given a category exists with title "Personal"                                # features/steps/category_steps.py:157
+    When the user sends a DELETE request to delete the category                  # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                          # features/steps/category_steps.py:43
+    And the category with title "Personal" is no longer in the system            # features/steps/category_steps.py:247
+
+  Scenario Outline: User deletes a category successfully (Normal Flow) -- @1.3   # features/delete_category.feature:17
+    Given the todo management API is running                                     # features/steps/api_steps.py:4
+    Given a category exists with title "Shopping"                                # features/steps/category_steps.py:157
+    When the user sends a DELETE request to delete the category                  # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                          # features/steps/category_steps.py:43
+    And the category with title "Shopping" is no longer in the system            # features/steps/category_steps.py:247
+
+  Scenario Outline: User deletes a category successfully (Normal Flow) -- @1.4   # features/delete_category.feature:18
+    Given the todo management API is running                                     # features/steps/api_steps.py:4
+    Given a category exists with title "Exercise"                                # features/steps/category_steps.py:157
+    When the user sends a DELETE request to delete the category                  # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                          # features/steps/category_steps.py:43
+    And the category with title "Exercise" is no longer in the system            # features/steps/category_steps.py:247
+
+  Scenario Outline: User attempts to delete a non-existent category (Error Flow) -- @1.1   # features/delete_category.feature:28
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    When the user sends a DELETE request to delete a category with ID "999"                # features/steps/category_steps.py:239
+    Then the category API responds with status code 404                                    # features/steps/category_steps.py:43
+    And the response body contains "errorMessages"                                         # features/steps/category_steps.py:143
+    And no changes are made to the system                                                  # features/steps/category_steps.py:256
+
+  Scenario Outline: User attempts to delete a non-existent category (Error Flow) -- @1.2   # features/delete_category.feature:29
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    When the user sends a DELETE request to delete a category with ID "-1"                 # features/steps/category_steps.py:239
+    Then the category API responds with status code 404                                    # features/steps/category_steps.py:43
+    And the response body contains "errorMessages"                                         # features/steps/category_steps.py:143
+    And no changes are made to the system                                                  # features/steps/category_steps.py:256
+
+  Scenario Outline: User attempts to delete a non-existent category (Error Flow) -- @1.3   # features/delete_category.feature:30
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    When the user sends a DELETE request to delete a category with ID "abc"                # features/steps/category_steps.py:239
+    Then the category API responds with status code 404                                    # features/steps/category_steps.py:43
+    And the response body contains "errorMessages"                                         # features/steps/category_steps.py:143
+    And no changes are made to the system                                                  # features/steps/category_steps.py:256
+
+  Scenario Outline: User attempts to delete a non-existent category (Error Flow) -- @1.4   # features/delete_category.feature:31
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    When the user sends a DELETE request to delete a category with ID "0"                  # features/steps/category_steps.py:239
+    Then the category API responds with status code 404                                    # features/steps/category_steps.py:43
+    And the response body contains "errorMessages"                                         # features/steps/category_steps.py:143
+    And no changes are made to the system                                                  # features/steps/category_steps.py:256
+
+  Scenario Outline: User deletes a category that has associated items (Alternative Flow) -- @1.1   # features/delete_category.feature:43
+    Given the todo management API is running                                                       # features/steps/api_steps.py:4
+    Given a category with title "{title}" and description "{description}" exists for deletion      # features/steps/category_steps.py:184
+    And there are items associated with this category                                              # features/steps/category_steps.py:212
+    When the user sends a DELETE request to delete the category                                    # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                                            # features/steps/category_steps.py:43
+    And the category with title "Work" is no longer in the system                                  # features/steps/category_steps.py:247
+    And the associated items no longer reference the deleted category                              # features/steps/category_steps.py:262
+
+  Scenario Outline: User deletes a category that has associated items (Alternative Flow) -- @1.2   # features/delete_category.feature:44
+    Given the todo management API is running                                                       # features/steps/api_steps.py:4
+    Given a category with title "{title}" and description "{description}" exists for deletion      # features/steps/category_steps.py:184
+    And there are items associated with this category                                              # features/steps/category_steps.py:212
+    When the user sends a DELETE request to delete the category                                    # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                                            # features/steps/category_steps.py:43
+    And the category with title "Personal" is no longer in the system                              # features/steps/category_steps.py:247
+    And the associated items no longer reference the deleted category                              # features/steps/category_steps.py:262
+
+  Scenario Outline: User deletes a category that has associated items (Alternative Flow) -- @1.3   # features/delete_category.feature:45
+    Given the todo management API is running                                                       # features/steps/api_steps.py:4
+    Given a category with title "{title}" and description "{description}" exists for deletion      # features/steps/category_steps.py:184
+    And there are items associated with this category                                              # features/steps/category_steps.py:212
+    When the user sends a DELETE request to delete the category                                    # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                                            # features/steps/category_steps.py:43
+    And the category with title "Shopping" is no longer in the system                              # features/steps/category_steps.py:247
+    And the associated items no longer reference the deleted category                              # features/steps/category_steps.py:262
+
+  Scenario Outline: User deletes a category that has associated items (Alternative Flow) -- @1.4   # features/delete_category.feature:46
+    Given the todo management API is running                                                       # features/steps/api_steps.py:4
+    Given a category with title "{title}" and description "{description}" exists for deletion      # features/steps/category_steps.py:184
+    And there are items associated with this category                                              # features/steps/category_steps.py:212
+    When the user sends a DELETE request to delete the category                                    # features/steps/category_steps.py:229
+    Then the category API responds with status code 200                                            # features/steps/category_steps.py:43
+    And the category with title "Exercise" is no longer in the system                              # features/steps/category_steps.py:247
+    And the associated items no longer reference the deleted category                              # features/steps/category_steps.py:262
+
+1 feature passed, 0 failed, 0 skipped
+12 scenarios passed, 0 failed, 0 skipped
+68 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.118s
+
+
+Running feature: features/get_todo_head.feature
+Checking if the API is running...
+API is running.
+Feature: Edit Todo Description # features/get_todo_head.feature:1
+  As a user, I want to send a HEAD request to todo, so that I can quickly see the todo details.
+  Background:   # features/get_todo_head.feature:4
+
+  Scenario Outline: The user retrieve HEAD for a todo instance -- @1.1   # features/get_todo_head.feature:18
+    Given the todo management API is running                             # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                      # features/steps/todo.steps.py:8
+      | title  | doneStatus | description             |
+      | task 1 | false      | "This is description 1" |
+    When the user sends a HEAD request to "/todos/:id"                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                      # features/steps/api_steps.py:9
+    And the response should not have a body                              # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/json"  # features/steps/todo.steps.py:306
+Deleted todo with ID: 421
+
+  Scenario Outline: The user retrieve HEAD for a todo instance -- @1.2   # features/get_todo_head.feature:19
+    Given the todo management API is running                             # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                      # features/steps/todo.steps.py:8
+      | title  | doneStatus | description             |
+      | task 2 | true       | "This is description 2" |
+    When the user sends a HEAD request to "/todos/:id"                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                      # features/steps/api_steps.py:9
+    And the response should not have a body                              # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/json"  # features/steps/todo.steps.py:306
+Deleted todo with ID: 422
+
+  Scenario Outline: The user retrieve HEAD for a todo instance -- @1.3   # features/get_todo_head.feature:20
+    Given the todo management API is running                             # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                      # features/steps/todo.steps.py:8
+      | title  | doneStatus | description |
+      | task 3 | true       | ""          |
+    When the user sends a HEAD request to "/todos/:id"                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                      # features/steps/api_steps.py:9
+    And the response should not have a body                              # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/json"  # features/steps/todo.steps.py:306
+Deleted todo with ID: 423
+
+  Scenario Outline: The user retrieve HEAD for a todo instance -- @1.4   # features/get_todo_head.feature:21
+    Given the todo management API is running                             # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                      # features/steps/todo.steps.py:8
+      | title  | doneStatus | description |
+      | task 4 | false      | ""          |
+    When the user sends a HEAD request to "/todos/:id"                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                      # features/steps/api_steps.py:9
+    And the response should not have a body                              # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/json"  # features/steps/todo.steps.py:306
+Deleted todo with ID: 424
+
+  Scenario Outline: The user retrieve HEAD for a todo instance as XML -- @1.1   # features/get_todo_head.feature:34
+    Given the todo management API is running                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                             # features/steps/todo.steps.py:8
+      | title  | doneStatus | description             |
+      | task 1 | false      | "This is description 1" |
+    When the user sends a HEAD request to "/todos/:id" as XML                   # features/steps/todo.steps.py:280
+    Then the API responds with status code 200 (OK)                             # features/steps/api_steps.py:9
+    And the response should not have a body                                     # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/xml"          # features/steps/todo.steps.py:306
+Deleted todo with ID: 425
+
+  Scenario Outline: The user retrieve HEAD for a todo instance as XML -- @1.2   # features/get_todo_head.feature:35
+    Given the todo management API is running                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                             # features/steps/todo.steps.py:8
+      | title  | doneStatus | description             |
+      | task 2 | true       | "This is description 2" |
+    When the user sends a HEAD request to "/todos/:id" as XML                   # features/steps/todo.steps.py:280
+    Then the API responds with status code 200 (OK)                             # features/steps/api_steps.py:9
+    And the response should not have a body                                     # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/xml"          # features/steps/todo.steps.py:306
+Deleted todo with ID: 426
+
+  Scenario Outline: The user retrieve HEAD for a todo instance as XML -- @1.3   # features/get_todo_head.feature:36
+    Given the todo management API is running                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                             # features/steps/todo.steps.py:8
+      | title  | doneStatus | description |
+      | task 3 | true       | ""          |
+    When the user sends a HEAD request to "/todos/:id" as XML                   # features/steps/todo.steps.py:280
+    Then the API responds with status code 200 (OK)                             # features/steps/api_steps.py:9
+    And the response should not have a body                                     # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/xml"          # features/steps/todo.steps.py:306
+Deleted todo with ID: 427
+
+  Scenario Outline: The user retrieve HEAD for a todo instance as XML -- @1.4   # features/get_todo_head.feature:37
+    Given the todo management API is running                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                             # features/steps/todo.steps.py:8
+      | title  | doneStatus | description |
+      | task 4 | false      | ""          |
+    When the user sends a HEAD request to "/todos/:id" as XML                   # features/steps/todo.steps.py:280
+    Then the API responds with status code 200 (OK)                             # features/steps/api_steps.py:9
+    And the response should not have a body                                     # features/steps/todo.steps.py:314
+    And the response header "Content-Type" should be "application/xml"          # features/steps/todo.steps.py:306
+Deleted todo with ID: 428
+
+  Scenario Outline: Send a HEAD request for a non-existing todo -- @1.1   # features/get_todo_head.feature:48
+    Given the todo management API is running                              # features/steps/api_steps.py:4
+    Given there is no todo item with id "0"                               # features/steps/todo.steps.py:217
+    When the user sends a HEAD request to "/todos/0"                      # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                # features/steps/api_steps.py:9
+    And the response should not have a body                               # features/steps/todo.steps.py:314
+    Then the system does not create or modify any todo items              # features/steps/todo.steps.py:236
+
+  Scenario Outline: Send a HEAD request for a non-existing todo -- @1.2   # features/get_todo_head.feature:49
+    Given the todo management API is running                              # features/steps/api_steps.py:4
+    Given there is no todo item with id "-1"                              # features/steps/todo.steps.py:217
+    When the user sends a HEAD request to "/todos/0"                      # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                # features/steps/api_steps.py:9
+    And the response should not have a body                               # features/steps/todo.steps.py:314
+    Then the system does not create or modify any todo items              # features/steps/todo.steps.py:236
+
+  Scenario Outline: Send a HEAD request for a non-existing todo -- @1.3   # features/get_todo_head.feature:50
+    Given the todo management API is running                              # features/steps/api_steps.py:4
+    Given there is no todo item with id "-2"                              # features/steps/todo.steps.py:217
+    When the user sends a HEAD request to "/todos/0"                      # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                # features/steps/api_steps.py:9
+    And the response should not have a body                               # features/steps/todo.steps.py:314
+    Then the system does not create or modify any todo items              # features/steps/todo.steps.py:236
+
+  Scenario Outline: Send a HEAD request for a non-existing todo -- @1.4   # features/get_todo_head.feature:51
+    Given the todo management API is running                              # features/steps/api_steps.py:4
+    Given there is no todo item with id "-3"                              # features/steps/todo.steps.py:217
+    When the user sends a HEAD request to "/todos/0"                      # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                # features/steps/api_steps.py:9
+    And the response should not have a body                               # features/steps/todo.steps.py:314
+    Then the system does not create or modify any todo items              # features/steps/todo.steps.py:236
+
+1 feature passed, 0 failed, 0 skipped
+12 scenarios passed, 0 failed, 0 skipped
+72 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.109s
+
+
+Running feature: features/delete_todo.feature
+Checking if the API is running...
+API is running.
+Feature: Delete Todo Item # features/delete_todo.feature:1
+  As a user, I want to delete a todo item, so that I can remove tasks that are no longer relevant.
+  Background:   # features/delete_todo.feature:4
+
+  Scenario Outline: User deletes a todo item successfully -- @1.1   # features/delete_todo.feature:17
+    Given the todo management API is running                        # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                 # features/steps/todo.steps.py:8
+      | title  | doneStatus | description             |
+      | task 1 | false      | "This is description 1" |
+    When the user sends a DELETE request to "/todos/:id"            # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                 # features/steps/api_steps.py:9
+    And the system removes the todo item from the database          # features/steps/todo.steps.py:346
+Failed to delete todo with ID: 429. Status: 404
+
+  Scenario Outline: User deletes a todo item successfully -- @1.2   # features/delete_todo.feature:18
+    Given the todo management API is running                        # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                 # features/steps/todo.steps.py:8
+      | title  | doneStatus | description             |
+      | task 2 | true       | "This is description 2" |
+    When the user sends a DELETE request to "/todos/:id"            # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                 # features/steps/api_steps.py:9
+    And the system removes the todo item from the database          # features/steps/todo.steps.py:346
+Failed to delete todo with ID: 430. Status: 404
+
+  Scenario Outline: User deletes a todo item successfully -- @1.3   # features/delete_todo.feature:19
+    Given the todo management API is running                        # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                 # features/steps/todo.steps.py:8
+      | title  | doneStatus | description |
+      | task 3 | true       | ""          |
+    When the user sends a DELETE request to "/todos/:id"            # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                 # features/steps/api_steps.py:9
+    And the system removes the todo item from the database          # features/steps/todo.steps.py:346
+Failed to delete todo with ID: 431. Status: 404
+
+  Scenario Outline: User deletes a todo item successfully -- @1.4   # features/delete_todo.feature:20
+    Given the todo management API is running                        # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                 # features/steps/todo.steps.py:8
+      | title  | doneStatus | description |
+      | task 4 | false      | ""          |
+    When the user sends a DELETE request to "/todos/:id"            # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                 # features/steps/api_steps.py:9
+    And the system removes the todo item from the database          # features/steps/todo.steps.py:346
+Failed to delete todo with ID: 432. Status: 404
+
+  Scenario Outline: The user deletes a todo item with a todo filter. -- @1.1   # features/delete_todo.feature:36
+    Given the todo management API is running                                   # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                            # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | true       | "my task"   |
+    When the user sends a GET request to "/todos?title=some%20task"            # features/steps/todo.steps.py:260
+    Then the user get only 1 todo item                                         # features/steps/todo.steps.py:295
+    And the user extract a todo id from todo item                              # features/steps/todo.steps.py:301
+    When the user sends a DELETE request to "/todos/:id"                       # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                            # features/steps/api_steps.py:9
+    And the system removes the todo item from the database                     # features/steps/todo.steps.py:346
+Failed to delete todo with ID: 433. Status: 404
+
+  Scenario Outline: The user deletes a todo item with a todo filter. -- @1.2   # features/delete_todo.feature:37
+    Given the todo management API is running                                   # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                            # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | true       | "my task"   |
+    When the user sends a GET request to "/todos?description="my%20task""      # features/steps/todo.steps.py:260
+    Then the user get only 1 todo item                                         # features/steps/todo.steps.py:295
+    And the user extract a todo id from todo item                              # features/steps/todo.steps.py:301
+    When the user sends a DELETE request to "/todos/:id"                       # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)                            # features/steps/api_steps.py:9
+    And the system removes the todo item from the database                     # features/steps/todo.steps.py:346
+Failed to delete todo with ID: 434. Status: 404
+
+  Scenario Outline: The user attempts to delete a todo item that does not exist. -- @1.1   # features/delete_todo.feature:47
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    Given there is no todo item with id "0"                                                # features/steps/todo.steps.py:217
+    When the user sends a DELETE request to "/todos/:-1"                                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                                 # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                               # features/steps/todo.steps.py:236
+
+  Scenario Outline: The user attempts to delete a todo item that does not exist. -- @1.2   # features/delete_todo.feature:48
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    Given there is no todo item with id "-1"                                               # features/steps/todo.steps.py:217
+    When the user sends a DELETE request to "/todos/:-1"                                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                                 # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                               # features/steps/todo.steps.py:236
+
+  Scenario Outline: The user attempts to delete a todo item that does not exist. -- @1.3   # features/delete_todo.feature:49
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    Given there is no todo item with id "-2"                                               # features/steps/todo.steps.py:217
+    When the user sends a DELETE request to "/todos/:-1"                                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                                 # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                               # features/steps/todo.steps.py:236
+
+  Scenario Outline: The user attempts to delete a todo item that does not exist. -- @1.4   # features/delete_todo.feature:50
+    Given the todo management API is running                                               # features/steps/api_steps.py:4
+    Given there is no todo item with id "-3"                                               # features/steps/todo.steps.py:217
+    When the user sends a DELETE request to "/todos/:-1"                                   # features/steps/todo.steps.py:260
+    Then the API responds with status code 404 (Not Found)                                 # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                               # features/steps/todo.steps.py:236
+
+1 feature passed, 0 failed, 0 skipped
+10 scenarios passed, 0 failed, 0 skipped
+56 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.131s
+
+
+Running feature: features/view_all_categories.feature
+Checking if the API is running...
+API is running.
+Feature: View All Categories # features/view_all_categories.feature:1
+  As a user, I want to view all categories, so that I can see the organization of my todos and projects.
+  Background:   # features/view_all_categories.feature:4
+
+  Scenario: User views all categories successfully (Normal Flow)  # features/view_all_categories.feature:7
+    Given the todo management API is running                      # features/steps/api_steps.py:4
+    Given there are categories in the system                      # features/steps/category_steps.py:497
+      | title      | description   |
+      | Category 1 | Description 1 |
+      | Category 2 | Description 2 |
+    When the user sends a GET request to /categories              # features/steps/category_steps.py:479
+    Then the API responds with status code 200 (OK)               # features/steps/api_steps.py:9
+    And the response body contains a list of all categories       # features/steps/category_steps.py:484
+Deleted category with ID: 201
+Deleted category with ID: 202
+
+  Scenario: User views all categories but no categories exist (Alternative Flow)  # features/view_all_categories.feature:16
+    Given the todo management API is running                                      # features/steps/api_steps.py:4
+    Given there are no categories in the system                                   # features/steps/category_steps.py:521
+    When the user sends a GET request to /categories                              # features/steps/category_steps.py:479
+    Then the API responds with status code 200 (OK)                               # features/steps/api_steps.py:9
+    And the response body contains an empty list                                  # features/steps/category_steps.py:541
+
+  Scenario: User sends an invalid request to view all categories      # features/view_all_categories.feature:22
+    Given the todo management API is running                          # features/steps/api_steps.py:4
+    Given the todo management API is running                          # features/steps/api_steps.py:4
+    When the user sends an invalid GET request to /invalid/categories # features/steps/category_steps.py:554
+    Then the API responds with status code 404 (Not Found)            # features/steps/api_steps.py:9
+
+1 feature passed, 0 failed, 0 skipped
+3 scenarios passed, 0 failed, 0 skipped
+14 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.022s
+
+
+Running feature: features/view_all_todos.feature
+Checking if the API is running...
+API is running.
+Feature: View All Todos # features/view_all_todos.feature:1
+  As a user, I want to retrieve all tasks associated with a specific todo item or project, so that I can see what needs to be done for that item or project.
+  Background:   # features/view_all_todos.feature:4
+
+  Scenario: User retrieves all todo items successfully  # features/view_all_todos.feature:7
+    Given the todo management API is running            # features/steps/api_steps.py:4
+    Given there are todo items stored in the system     # features/steps/todo.steps.py:8
+      | title         | doneStatus | description  |
+      | Buy groceries | false      | Necessity    |
+      | Finish report | true       | Work project |
+    When the user sends a GET request to "/todos"       # features/steps/todo.steps.py:260
+    Then the API responds with status code 200 (OK)     # features/steps/api_steps.py:9
+Deleted todo with ID: 435
+Deleted todo with ID: 436
+
+  Scenario Outline: User retrieve todo items with a specific title -- @1.1   # features/view_all_todos.feature:28
+    Given the todo management API is running                                 # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                          # features/steps/todo.steps.py:8
+      | title         | doneStatus | description  |
+      | some task     | true       | my task      |
+      | Buy groceries | false      | Necessity    |
+      | Finish report | true       | Work project |
+    When the user sends a GET request to "/todos?title=some%20task"          # features/steps/todo.steps.py:260
+    Then the response body contains an todo with the title "some task"       # features/steps/todo.steps.py:321
+    And the todo has a description of "my task"                              # features/steps/todo.steps.py:329
+    And the done status is "true"                                            # features/steps/todo.steps.py:337
+Deleted todo with ID: 437
+Deleted todo with ID: 438
+Deleted todo with ID: 439
+
+  Scenario Outline: User retrieve todo items with a specific title -- @1.2   # features/view_all_todos.feature:29
+    Given the todo management API is running                                 # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                          # features/steps/todo.steps.py:8
+      | title         | doneStatus | description  |
+      | some task     | true       | my task      |
+      | Buy groceries | false      | Necessity    |
+      | Finish report | true       | Work project |
+    When the user sends a GET request to "/todos?description=my%20task"      # features/steps/todo.steps.py:260
+    Then the response body contains an todo with the title "some task"       # features/steps/todo.steps.py:321
+    And the todo has a description of "my task"                              # features/steps/todo.steps.py:329
+    And the done status is "true"                                            # features/steps/todo.steps.py:337
+Deleted todo with ID: 440
+Deleted todo with ID: 441
+Deleted todo with ID: 442
+
+  Scenario Outline: User provides invalid query parameter while listing todos -- @1.1   # features/view_all_todos.feature:43
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                     # features/steps/todo.steps.py:8
+      | title         | doneStatus | description  |
+      | some task     | true       | my task      |
+      | Buy groceries | false      | Necessity    |
+      | Finish report | true       | Work project |
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user sends a GET request to "/todos?finished=true"                         # features/steps/todo.steps.py:260
+    Then the API responds with status code 400 (Bad Request)                            # features/steps/api_steps.py:9
+      Assertion Failed: Expected status code 400, but got 200.
+
+Deleted todo with ID: 443
+Deleted todo with ID: 444
+Deleted todo with ID: 445
+
+  Scenario Outline: User provides invalid query parameter while listing todos -- @1.2   # features/view_all_todos.feature:44
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                     # features/steps/todo.steps.py:8
+      | title         | doneStatus | description  |
+      | some task     | true       | my task      |
+      | Buy groceries | false      | Necessity    |
+      | Finish report | true       | Work project |
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user sends a GET request to "/todos?name=my%20task"                        # features/steps/todo.steps.py:260
+    Then the API responds with status code 400 (Bad Request)                            # features/steps/api_steps.py:9
+      Assertion Failed: Expected status code 400, but got 200.
+
+Deleted todo with ID: 446
+Deleted todo with ID: 447
+Deleted todo with ID: 448
+
+  Scenario Outline: User provides invalid query parameter value while listing todos -- @1.1   # features/view_all_todos.feature:58
+    Given the todo management API is running                                                  # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                           # features/steps/todo.steps.py:8
+      | title         | doneStatus | description  |
+      | some task     | true       | my task      |
+      | Buy groceries | false      | Necessity    |
+      | Finish report | true       | Work project |
+    Given the todo management API is running                                                  # features/steps/api_steps.py:4
+    When the user sends a GET request to "/todos?doneStatus=maybeee"                          # features/steps/todo.steps.py:260
+    Then the API responds with status code 400 (Bad Request)                                  # features/steps/api_steps.py:9
+      Assertion Failed: Expected status code 400, but got 200.
+
+Deleted todo with ID: 449
+Deleted todo with ID: 450
+Deleted todo with ID: 451
+
+
+Failing scenarios:
+  features/view_all_todos.feature:43  User provides invalid query parameter while listing todos -- @1.1 
+  features/view_all_todos.feature:44  User provides invalid query parameter while listing todos -- @1.2 
+  features/view_all_todos.feature:58  User provides invalid query parameter value while listing todos -- @1.1 
+
+0 features passed, 1 failed, 0 skipped
+3 scenarios passed, 3 failed, 0 skipped
+28 steps passed, 3 failed, 0 skipped, 0 undefined
+Took 0m0.114s
+
+
+Running feature: features/modify_todo_fields.feature
+Checking if the API is running...
+API is running.
+Feature: Update Todo Item Details # features/modify_todo_fields.feature:1
+  As a user, I want to edit the details of a todo item so that I can keep my task list accurate and up-to-date with my current needs.
+  Background:   # features/modify_todo_fields.feature:4
+
+  Scenario Outline: The user successfully update a todo item details with PUT method. -- @1.1   # features/modify_todo_fields.feature:17
+    Given the todo management API is running                                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                             # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | false      | ""          |
+    When the user update the "doneStatus" of todo task "some task" to "finished" with PUT       # features/steps/todo.steps.py:147
+      Assertion Failed: Failed to update todo: some task. Status: 400 Error: ['title : field is mandatory']
+
+Deleted todo with ID: 452
+    Then the API responds with status code 200 (OK)                                             # None
+    And the system updates the todo item "doneStatus" to "finished"                             # None
+
+  Scenario Outline: The user successfully update a todo item details with PUT method. -- @1.2   # features/modify_todo_fields.feature:18
+    Given the todo management API is running                                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                             # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | false      | ""          |
+    When the user update the "title" of todo task "some task" to "new title" with PUT           # features/steps/todo.steps.py:147
+    Then the API responds with status code 200 (OK)                                             # features/steps/api_steps.py:9
+    And the system updates the todo item "title" to "new title"                                 # features/steps/todo.steps.py:200
+Deleted todo with ID: 453
+
+  Scenario Outline: The user successfully update a todo item details with PUT method. -- @1.3   # features/modify_todo_fields.feature:19
+    Given the todo management API is running                                                    # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                             # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | false      | ""          |
+    When the user update the "description" of todo task "some task" to "it is a task" with PUT  # features/steps/todo.steps.py:147
+      Assertion Failed: Failed to update todo: some task. Status: 400 Error: ['title : field is mandatory']
+
+Deleted todo with ID: 454
+    Then the API responds with status code 200 (OK)                                             # None
+    And the system updates the todo item "description" to "it is a task"                        # None
+
+  Scenario Outline: The user successfully update a todo item details with POST method. -- @1.1   # features/modify_todo_fields.feature:31
+    Given the todo management API is running                                                     # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                              # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | false      | ""          |
+    When the user update the "doneStatus" of todo task "some task" to "finished" with POST       # features/steps/todo.steps.py:147
+    Then the API responds with status code 200 (OK)                                              # features/steps/api_steps.py:9
+    And the system updates the todo item "doneStatus" to "finished"                              # features/steps/todo.steps.py:200
+Deleted todo with ID: 455
+
+  Scenario Outline: The user successfully update a todo item details with POST method. -- @1.2   # features/modify_todo_fields.feature:32
+    Given the todo management API is running                                                     # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                              # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | false      | ""          |
+    When the user update the "title" of todo task "some task" to "new title" with POST           # features/steps/todo.steps.py:147
+    Then the API responds with status code 200 (OK)                                              # features/steps/api_steps.py:9
+    And the system updates the todo item "title" to "new title"                                  # features/steps/todo.steps.py:200
+Deleted todo with ID: 456
+
+  Scenario Outline: The user successfully update a todo item details with POST method. -- @1.3   # features/modify_todo_fields.feature:33
+    Given the todo management API is running                                                     # features/steps/api_steps.py:4
+    Given there are todo items stored in the system                                              # features/steps/todo.steps.py:8
+      | title     | doneStatus | description |
+      | some task | false      | ""          |
+    When the user update the "description" of todo task "some task" to "it is a task" with POST  # features/steps/todo.steps.py:147
+    Then the API responds with status code 200 (OK)                                              # features/steps/api_steps.py:9
+    And the system updates the todo item "description" to "it is a task"                         # features/steps/todo.steps.py:200
+Deleted todo with ID: 457
+
+  Scenario Outline: User tries to mark a non-existent todo item as finished. -- @1.1   # features/modify_todo_fields.feature:43
+    Given the todo management API is running                                           # features/steps/api_steps.py:4
+    Given there is no todo item with id "0"                                            # features/steps/todo.steps.py:217
+    When the user update the todo task with id "0" as "finished"                       # features/steps/todo.steps.py:184
+    Then the API responds with status code 404 (Not Found)                             # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                           # features/steps/todo.steps.py:236
+
+  Scenario Outline: User tries to mark a non-existent todo item as finished. -- @1.2   # features/modify_todo_fields.feature:44
+    Given the todo management API is running                                           # features/steps/api_steps.py:4
+    Given there is no todo item with id "-1"                                           # features/steps/todo.steps.py:217
+    When the user update the todo task with id "-1" as "finished"                      # features/steps/todo.steps.py:184
+    Then the API responds with status code 404 (Not Found)                             # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                           # features/steps/todo.steps.py:236
+
+  Scenario Outline: User tries to mark a non-existent todo item as finished. -- @1.3   # features/modify_todo_fields.feature:45
+    Given the todo management API is running                                           # features/steps/api_steps.py:4
+    Given there is no todo item with id "-2"                                           # features/steps/todo.steps.py:217
+    When the user update the todo task with id "-2" as "finished"                      # features/steps/todo.steps.py:184
+    Then the API responds with status code 404 (Not Found)                             # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                           # features/steps/todo.steps.py:236
+
+  Scenario Outline: User tries to mark a non-existent todo item as finished. -- @1.4   # features/modify_todo_fields.feature:46
+    Given the todo management API is running                                           # features/steps/api_steps.py:4
+    Given there is no todo item with id "-3"                                           # features/steps/todo.steps.py:217
+    When the user update the todo task with id "-3" as "finished"                      # features/steps/todo.steps.py:184
+    Then the API responds with status code 404 (Not Found)                             # features/steps/api_steps.py:9
+    Then the system does not create or modify any todo items                           # features/steps/todo.steps.py:236
+
+
+Failing scenarios:
+  features/modify_todo_fields.feature:17  The user successfully update a todo item details with PUT method. -- @1.1 
+  features/modify_todo_fields.feature:19  The user successfully update a todo item details with PUT method. -- @1.3 
+
+0 features passed, 1 failed, 0 skipped
+8 scenarios passed, 2 failed, 0 skipped
+44 steps passed, 2 failed, 4 skipped, 0 undefined
+Took 0m0.098s
+
+
+Running feature: features/create_category.feature
+Checking if the API is running...
+API is running.
+Feature: Create a New Category # features/create_category.feature:1
+  As a user, I want to create a new category so that I can keep track of my todos and projects effectively
+  Background:   # features/create_category.feature:3
+
+  Scenario Outline: User creates a new category successfully (Normal Flow) -- @1.1   # features/create_category.feature:14
+    Given the todo management API is running                                         # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Work"  # features/steps/category_steps.py:25
+    Then the category API responds with status code 201                              # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Work"                                 # features/steps/category_steps.py:49
+    Then the system stores the new category                                          # features/steps/category_steps.py:75
+Deleted category with ID: 203
+
+  Scenario Outline: User creates a new category successfully (Normal Flow) -- @1.2      # features/create_category.feature:15
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Personal" # features/steps/category_steps.py:25
+    Then the category API responds with status code 201                                 # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Personal"                                # features/steps/category_steps.py:49
+    Then the system stores the new category                                             # features/steps/category_steps.py:75
+Deleted category with ID: 204
+
+  Scenario Outline: User creates a new category successfully (Normal Flow) -- @1.3      # features/create_category.feature:16
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Shopping" # features/steps/category_steps.py:25
+    Then the category API responds with status code 201                                 # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Shopping"                                # features/steps/category_steps.py:49
+    Then the system stores the new category                                             # features/steps/category_steps.py:75
+Deleted category with ID: 205
+
+  Scenario Outline: User creates a new category successfully (Normal Flow) -- @1.4      # features/create_category.feature:17
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Exercise" # features/steps/category_steps.py:25
+    Then the category API responds with status code 201                                 # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Exercise"                                # features/steps/category_steps.py:49
+    Then the system stores the new category                                             # features/steps/category_steps.py:75
+Deleted category with ID: 206
+
+  Scenario Outline: User creates a new category with description (Alternative Flow) -- @1.1                          # features/create_category.feature:28
+    Given the todo management API is running                                                                         # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Work" and description "Tasks for work" # features/steps/category_steps.py:5
+    Then the category API responds with status code 201                                                              # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Work"                                                                 # features/steps/category_steps.py:49
+    And the response body includes "description" as "Tasks for work"                                                 # features/steps/category_steps.py:62
+    Then the system stores the new category                                                                          # features/steps/category_steps.py:75
+Deleted category with ID: 207
+
+  Scenario Outline: User creates a new category with description (Alternative Flow) -- @1.2                                   # features/create_category.feature:29
+    Given the todo management API is running                                                                                  # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Personal" and description "Personal activities" # features/steps/category_steps.py:5
+    Then the category API responds with status code 201                                                                       # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Personal"                                                                      # features/steps/category_steps.py:49
+    And the response body includes "description" as "Personal activities"                                                     # features/steps/category_steps.py:62
+    Then the system stores the new category                                                                                   # features/steps/category_steps.py:75
+Deleted category with ID: 208
+
+  Scenario Outline: User creates a new category with description (Alternative Flow) -- @1.3                                   # features/create_category.feature:30
+    Given the todo management API is running                                                                                  # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Shopping" and description "Groceries and items" # features/steps/category_steps.py:5
+    Then the category API responds with status code 201                                                                       # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Shopping"                                                                      # features/steps/category_steps.py:49
+    And the response body includes "description" as "Groceries and items"                                                     # features/steps/category_steps.py:62
+    Then the system stores the new category                                                                                   # features/steps/category_steps.py:75
+Deleted category with ID: 209
+
+  Scenario Outline: User creates a new category with description (Alternative Flow) -- @1.4                                 # features/create_category.feature:31
+    Given the todo management API is running                                                                                # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with the title "Exercise" and description "Exercise routines" # features/steps/category_steps.py:5
+    Then the category API responds with status code 201                                                                     # features/steps/category_steps.py:43
+    And the response body confirms "title" as "Exercise"                                                                    # features/steps/category_steps.py:49
+    And the response body includes "description" as "Exercise routines"                                                     # features/steps/category_steps.py:62
+    Then the system stores the new category                                                                                 # features/steps/category_steps.py:75
+Deleted category with ID: 210
+
+  Scenario: User attempts to create a category with an ID (Error Flow)   # features/create_category.feature:33
+    Given the todo management API is running                             # features/steps/api_steps.py:4
+    When the user submits a POST request to create a category with an ID # features/steps/category_steps.py:112
+    Then the category API responds with status code 400                  # features/steps/category_steps.py:43
+    And the response body contains "errorMessages"                       # features/steps/category_steps.py:143
+    And the category is not stored in the system                         # features/steps/category_steps.py:126
+
+1 feature passed, 0 failed, 0 skipped
+9 scenarios passed, 0 failed, 0 skipped
+49 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.053s
+
+
+Running feature: features/view_all_projects.feature
+Checking if the API is running...
+API is running.
+Feature: Retrieve all Projects # features/view_all_projects.feature:1
+  As a user, I want to retrieve details of specific projects to view their information.
+  Background:   # features/view_all_projects.feature:4
+
+  Scenario Outline: User retrieves all existings projects (Normal Flow) -- @1.1   # features/view_all_projects.feature:16
+    Given the todo management API is running                                      # features/steps/api_steps.py:4
+    Given at least 1 project exists                                               # features/steps/project.steps.py:383
+    And the initial project list is captured                                      # features/steps/project.steps.py:208
+    When the user sends a GET request on /projects                                # features/steps/project.steps.py:409
+    Then the API responds with status code 200 (OK)                               # features/steps/api_steps.py:9
+    And the response body contains all projects                                   # features/steps/project.steps.py:476
+
+  Scenario Outline: User retrieves all existings projects (Normal Flow) -- @1.2   # features/view_all_projects.feature:17
+    Given the todo management API is running                                      # features/steps/api_steps.py:4
+    Given at least 2 project exists                                               # features/steps/project.steps.py:383
+    And the initial project list is captured                                      # features/steps/project.steps.py:208
+    When the user sends a GET request on /projects                                # features/steps/project.steps.py:409
+    Then the API responds with status code 200 (OK)                               # features/steps/api_steps.py:9
+    And the response body contains all projects                                   # features/steps/project.steps.py:476
+Deleted project with ID: 109
+
+  Scenario Outline: User retrieves all existings projects (Normal Flow) -- @1.3   # features/view_all_projects.feature:18
+    Given the todo management API is running                                      # features/steps/api_steps.py:4
+    Given at least 3 project exists                                               # features/steps/project.steps.py:383
+    And the initial project list is captured                                      # features/steps/project.steps.py:208
+    When the user sends a GET request on /projects                                # features/steps/project.steps.py:409
+    Then the API responds with status code 200 (OK)                               # features/steps/api_steps.py:9
+    And the response body contains all projects                                   # features/steps/project.steps.py:476
+Deleted project with ID: 110
+Deleted project with ID: 111
+
+  Scenario Outline: User retrieves all projects by iterating through project IDs (Alternate Flow) -- @1.1   # features/view_all_projects.feature:29
+    Given the todo management API is running                                                                # features/steps/api_steps.py:4
+    Given at least 1 project exists                                                                         # features/steps/project.steps.py:383
+    And the initial project list is captured                                                                # features/steps/project.steps.py:208
+    When the user sends a GET request to retrieve each project by its ID                                    # features/steps/project.steps.py:417
+    Then the API responds with status code 200 (OK) for each project                                        # features/steps/project.steps.py:460
+    And each response body confirms the correct project ID and title                                        # features/steps/project.steps.py:433
+
+  Scenario Outline: User retrieves all projects by iterating through project IDs (Alternate Flow) -- @1.2   # features/view_all_projects.feature:30
+    Given the todo management API is running                                                                # features/steps/api_steps.py:4
+    Given at least 2 project exists                                                                         # features/steps/project.steps.py:383
+    And the initial project list is captured                                                                # features/steps/project.steps.py:208
+    When the user sends a GET request to retrieve each project by its ID                                    # features/steps/project.steps.py:417
+    Then the API responds with status code 200 (OK) for each project                                        # features/steps/project.steps.py:460
+    And each response body confirms the correct project ID and title                                        # features/steps/project.steps.py:433
+Deleted project with ID: 112
+
+  Scenario Outline: User retrieves all projects by iterating through project IDs (Alternate Flow) -- @1.3   # features/view_all_projects.feature:31
+    Given the todo management API is running                                                                # features/steps/api_steps.py:4
+    Given at least 3 project exists                                                                         # features/steps/project.steps.py:383
+    And the initial project list is captured                                                                # features/steps/project.steps.py:208
+    When the user sends a GET request to retrieve each project by its ID                                    # features/steps/project.steps.py:417
+    Then the API responds with status code 200 (OK) for each project                                        # features/steps/project.steps.py:460
+    And each response body confirms the correct project ID and title                                        # features/steps/project.steps.py:433
+Deleted project with ID: 113
+Deleted project with ID: 114
+
+  Scenario: User attempts to retrieve all projects by leaving empty id (Error Flow)  # features/view_all_projects.feature:34
+    Given the todo management API is running                                         # features/steps/api_steps.py:4
+    When the user submits a GET request to /projects/                                # features/steps/project.steps.py:506
+    Then the API responds with status code 404 (Not Found)                           # features/steps/api_steps.py:9
+
+1 feature passed, 0 failed, 0 skipped
+7 scenarios passed, 0 failed, 0 skipped
+39 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.094s
+
+
+Running feature: features/get_project.feature
+Checking if the API is running...
+API is running.
+Feature: View a Project # features/get_project.feature:1
+  As a user, I want to view specific details of a project.
+  Background:   # features/get_project.feature:4
+
+  Scenario Outline: User retrieves a project by ID (Normal Flow) -- @1.1    # features/get_project.feature:17
+    Given the todo management API is running                                # features/steps/api_steps.py:4
+    And the initial project list is captured                                # features/steps/project.steps.py:208
+    Given a project with title "Project to Get" exists                      # features/steps/project.steps.py:9
+    When the user sends a GET request to with the corresponding projects id # features/steps/project.steps.py:323
+    Then the API responds with status code 200 (OK)                         # features/steps/api_steps.py:9
+    And the response body confirms the correct id and corresponding title   # features/steps/project.steps.py:333
+Deleted project with ID: 115
+
+  Scenario Outline: User retrieves a project by accessing an associated tasks (Alternate Flow) -- @1.1   # features/get_project.feature:28
+    Given the todo management API is running                                                             # features/steps/api_steps.py:4
+    And the initial project list is captured                                                             # features/steps/project.steps.py:208
+    Given a project with title ""Project with Todo"" exists                                              # features/steps/project.steps.py:9
+    And tasks are associated with the project                                                            # features/steps/project.steps.py:214
+      Assertion Failed: Failed to associate task 458 with project 116. Status: 400
+
+Deleted project with ID: 116
+    When the user sends a GET request to retrieve the project through the tasks' project association     # None
+    Then the API responds with status code 200 (OK)                                                      # None
+    And the response body confirms the correct id and corresponding title                                # None
+
+  Scenario Outline: User attempts to retrieve a project with an invalid ID (Error Flow) -- @1.1   # features/get_project.feature:37
+    Given the todo management API is running                                                      # features/steps/api_steps.py:4
+    And the initial project list is captured                                                      # features/steps/project.steps.py:208
+    When the user sends a GET request with id "-1"                                                # features/steps/project.steps.py:347
+    Then the API responds with status code 404 (Not Found)                                        # features/steps/api_steps.py:9
+    Then the system does not create or modify any projects                                        # features/steps/project.steps.py:287
+
+
+Failing scenarios:
+  features/get_project.feature:28  User retrieves a project by accessing an associated tasks (Alternate Flow) -- @1.1 
+
+0 features passed, 1 failed, 0 skipped
+2 scenarios passed, 1 failed, 0 skipped
+14 steps passed, 1 failed, 3 skipped, 0 undefined
+Took 0m0.036s
+
+
+Running feature: features/modify_category.feature
+Checking if the API is running...
+API is running.
+Feature: Update Category Details # features/modify_category.feature:1
+  As a user, I want to edit the details of a category so that I can keep my categories accurate and reflective of current information.
+  Background:   # features/modify_category.feature:4
+
+  Scenario Outline: The user successfully updates a category's details using PUT method. -- @1.1   # features/modify_category.feature:16
+    Given the todo management API is running                                                       # features/steps/api_steps.py:4
+    Given there are categories stored in the system                                                # features/steps/category_steps.py:374
+      | title      | description        |
+      | Work Tasks | Initial work tasks |
+    When the user updates the "title" of category "Work Tasks" to "Updated Work Tasks" with PUT    # features/steps/category_steps.py:389
+    Then the API responds with status code 200 (OK)                                                # features/steps/api_steps.py:9
+Deleted category with ID: 211
+
+  Scenario Outline: The user successfully updates a category's details using PUT method. -- @1.2       # features/modify_category.feature:17
+    Given the todo management API is running                                                           # features/steps/api_steps.py:4
+    Given there are categories stored in the system                                                    # features/steps/category_steps.py:374
+      | title    | description          |
+      | Personal | Personal information |
+    When the user updates the "description" of category "Personal" to "Updated personal info" with PUT # features/steps/category_steps.py:389
+    Then the API responds with status code 200 (OK)                                                    # features/steps/api_steps.py:9
+      Assertion Failed: Expected status code 200, but got 400.
+
+Failed to delete category with ID: None. Status: 404
+
+  Scenario Outline: The user successfully updates a category's details using PUT method. -- @1.3   # features/modify_category.feature:18
+    Given the todo management API is running                                                       # features/steps/api_steps.py:4
+    Given there are categories stored in the system                                                # features/steps/category_steps.py:374
+      | title   | description       |
+      | Fitness | Goals for fitness |
+    When the user updates the "title" of category "Fitness" to "Updated Fitness Goals" with PUT    # features/steps/category_steps.py:389
+    Then the API responds with status code 200 (OK)                                                # features/steps/api_steps.py:9
+Deleted category with ID: 213
+
+  Scenario Outline: The user successfully updates a category's details using POST method. -- @1.1   # features/modify_category.feature:29
+    Given the todo management API is running                                                        # features/steps/api_steps.py:4
+    Given there are categories stored in the system                                                 # features/steps/category_steps.py:374
+      | title      | description        |
+      | Work Tasks | Initial work tasks |
+    When the user updates the "title" of category "Work Tasks" to "Updated Work Tasks" with POST    # features/steps/category_steps.py:413
+    Then the API responds with status code 200 (OK)                                                 # features/steps/api_steps.py:9
+Deleted category with ID: 214
+
+  Scenario Outline: The user successfully updates a category's details using POST method. -- @1.2       # features/modify_category.feature:30
+    Given the todo management API is running                                                            # features/steps/api_steps.py:4
+    Given there are categories stored in the system                                                     # features/steps/category_steps.py:374
+      | title    | description          |
+      | Personal | Personal information |
+    When the user updates the "description" of category "Personal" to "Updated personal info" with POST # features/steps/category_steps.py:413
+    Then the API responds with status code 200 (OK)                                                     # features/steps/api_steps.py:9
+Deleted category with ID: 215
+
+  Scenario Outline: The user successfully updates a category's details using POST method. -- @1.3   # features/modify_category.feature:31
+    Given the todo management API is running                                                        # features/steps/api_steps.py:4
+    Given there are categories stored in the system                                                 # features/steps/category_steps.py:374
+      | title   | description       |
+      | Fitness | Goals for fitness |
+    When the user updates the "title" of category "Fitness" to "Updated Fitness Goals" with POST    # features/steps/category_steps.py:413
+    Then the API responds with status code 200 (OK)                                                 # features/steps/api_steps.py:9
+Deleted category with ID: 216
+
+  Scenario Outline: User attempts to update a non-existent category. -- @1.1   # features/modify_category.feature:41
+    Given the todo management API is running                                   # features/steps/api_steps.py:4
+    Given there is no category with ID "0"                                     # features/steps/category_steps.py:435
+    When the user tries to update the category with ID "0"                     # features/steps/category_steps.py:466
+    Then the API responds with status code 404 (Not Found)                     # features/steps/api_steps.py:9
+    And the system does not create or modify any categories                    # features/steps/category_steps.py:452
+
+  Scenario Outline: User attempts to update a non-existent category. -- @1.2   # features/modify_category.feature:42
+    Given the todo management API is running                                   # features/steps/api_steps.py:4
+    Given there is no category with ID "-1"                                    # features/steps/category_steps.py:435
+    When the user tries to update the category with ID "-1"                    # features/steps/category_steps.py:466
+    Then the API responds with status code 404 (Not Found)                     # features/steps/api_steps.py:9
+    And the system does not create or modify any categories                    # features/steps/category_steps.py:452
+
+  Scenario Outline: User attempts to update a non-existent category. -- @1.3   # features/modify_category.feature:43
+    Given the todo management API is running                                   # features/steps/api_steps.py:4
+    Given there is no category with ID "999"                                   # features/steps/category_steps.py:435
+    When the user tries to update the category with ID "999"                   # features/steps/category_steps.py:466
+    Then the API responds with status code 404 (Not Found)                     # features/steps/api_steps.py:9
+    And the system does not create or modify any categories                    # features/steps/category_steps.py:452
+
+  Scenario Outline: User attempts to update a non-existent category. -- @1.4   # features/modify_category.feature:44
+    Given the todo management API is running                                   # features/steps/api_steps.py:4
+    Given there is no category with ID "12345"                                 # features/steps/category_steps.py:435
+    When the user tries to update the category with ID "12345"                 # features/steps/category_steps.py:466
+    Then the API responds with status code 404 (Not Found)                     # features/steps/api_steps.py:9
+    And the system does not create or modify any categories                    # features/steps/category_steps.py:452
+
+
+Failing scenarios:
+  features/modify_category.feature:17  The user successfully updates a category's details using PUT method. -- @1.2 
+
+0 features passed, 1 failed, 0 skipped
+9 scenarios passed, 1 failed, 0 skipped
+43 steps passed, 1 failed, 0 skipped, 0 undefined
+Took 0m0.089s
+
+
+Running feature: features/delete_project.feature
+Checking if the API is running...
+API is running.
+Feature: Delete a Project # features/delete_project.feature:1
+  As a user, I want to delete projects that are no longer needed.
+  Background:   # features/delete_project.feature:4
+
+  Scenario Outline: User deletes an existing project by ID (Normal Flow) -- @1.1   # features/delete_project.feature:16
+    Given the todo management API is running                                       # features/steps/api_steps.py:4
+    And the initial project list is captured                                       # features/steps/project.steps.py:208
+    Given a project with title "Project to Delete" exists                          # features/steps/project.steps.py:9
+    When the user sends a DELETE request using the corresponding projects id       # features/steps/project.steps.py:250
+    Then the API responds with status code 200 (OK)                                # features/steps/api_steps.py:9
+    And the system removes the project from the database                           # features/steps/project.steps.py:261
+Failed to delete project with ID: 117. Status: 404
+
+  Scenario Outline: User attempts to delete a project with associated tasks (Alternate Flow) -- @1.1   # features/delete_project.feature:27
+    Given the todo management API is running                                                           # features/steps/api_steps.py:4
+    And the initial project list is captured                                                           # features/steps/project.steps.py:208
+    Given a project with title "Project with Todos" exists                                             # features/steps/project.steps.py:9
+    And tasks are associated with the project                                                          # features/steps/project.steps.py:214
+      Assertion Failed: Failed to associate task 459 with project 118. Status: 400
+
+Deleted project with ID: 118
+    When the user sends a DELETE request using the corresponding projects id                           # None
+    Then the API responds with status code 200 (OK)                                                    # None
+    And the system removes the project and its associated tasks from the database                      # None
+
+  Scenario Outline: User attempts to delete a project with an invalid ID (Error Flow) -- @1.1   # features/delete_project.feature:37
+    Given the todo management API is running                                                    # features/steps/api_steps.py:4
+    And the initial project list is captured                                                    # features/steps/project.steps.py:208
+    Given there is no project with id "-1"                                                      # features/steps/project.steps.py:271
+    When the user sends a DELETE request with id "-1"                                           # features/steps/project.steps.py:280
+    Then the API responds with status code 404 (Not Found)                                      # features/steps/api_steps.py:9
+    And the system does not create or modify any projects                                       # features/steps/project.steps.py:287
+
+
+Failing scenarios:
+  features/delete_project.feature:27  User attempts to delete a project with associated tasks (Alternate Flow) -- @1.1 
+
+0 features passed, 1 failed, 0 skipped
+2 scenarios passed, 1 failed, 0 skipped
+15 steps passed, 1 failed, 3 skipped, 0 undefined
+Took 0m0.040s
+
+
+Running feature: features/create_todo_Item.feature
+Checking if the API is running...
+API is running.
+Feature: Create a New Todo Item # features/create_todo_Item.feature:1
+  As a user, I want to create a new todo item, so that I can keep track of tasks I need to complete.
+  Background:   # features/create_todo_Item.feature:4
+
+  Scenario Outline: User creates a new todo item successfully (Normal Flow) -- @1.1   # features/create_todo_Item.feature:15
+    Given the todo management API is running                                          # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title "task 1"              # features/steps/todo.steps.py:30
+    Then the API responds with status code 201 (Created)                              # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 1"                                # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                               # features/steps/todo.steps.py:70
+Deleted todo with ID: 460
+
+  Scenario Outline: User creates a new todo item successfully (Normal Flow) -- @1.2   # features/create_todo_Item.feature:16
+    Given the todo management API is running                                          # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title "task 2"              # features/steps/todo.steps.py:30
+    Then the API responds with status code 201 (Created)                              # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 2"                                # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                               # features/steps/todo.steps.py:70
+Deleted todo with ID: 461
+
+  Scenario Outline: User creates a new todo item successfully (Normal Flow) -- @1.3   # features/create_todo_Item.feature:17
+    Given the todo management API is running                                          # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title "task 3"              # features/steps/todo.steps.py:30
+    Then the API responds with status code 201 (Created)                              # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 3"                                # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                               # features/steps/todo.steps.py:70
+Deleted todo with ID: 462
+
+  Scenario Outline: User creates a new todo item successfully (Normal Flow) -- @1.4   # features/create_todo_Item.feature:18
+    Given the todo management API is running                                          # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title "task 4"              # features/steps/todo.steps.py:30
+    Then the API responds with status code 201 (Created)                              # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 4"                                # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                               # features/steps/todo.steps.py:70
+Deleted todo with ID: 463
+
+  Scenario Outline: User creates a new todo item with description (Alternative Flow) -- @1.1                            # features/create_todo_Item.feature:28
+    Given the todo management API is running                                                                            # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title name "task 1" and description ""This is description 1"" # features/steps/todo.steps.py:105
+    Then the API responds with status code 201 (Created)                                                                # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 1"                                                                  # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                                                                 # features/steps/todo.steps.py:70
+Deleted todo with ID: 464
+
+  Scenario Outline: User creates a new todo item with description (Alternative Flow) -- @1.2                            # features/create_todo_Item.feature:29
+    Given the todo management API is running                                                                            # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title name "task 2" and description ""This is description 2"" # features/steps/todo.steps.py:105
+    Then the API responds with status code 201 (Created)                                                                # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 2"                                                                  # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                                                                 # features/steps/todo.steps.py:70
+Deleted todo with ID: 465
+
+  Scenario Outline: User creates a new todo item with description (Alternative Flow) -- @1.3                            # features/create_todo_Item.feature:30
+    Given the todo management API is running                                                                            # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title name "task 3" and description ""This is description 3"" # features/steps/todo.steps.py:105
+    Then the API responds with status code 201 (Created)                                                                # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 3"                                                                  # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                                                                 # features/steps/todo.steps.py:70
+Deleted todo with ID: 466
+
+  Scenario Outline: User creates a new todo item with description (Alternative Flow) -- @1.4                            # features/create_todo_Item.feature:31
+    Given the todo management API is running                                                                            # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title name "task 4" and description ""This is description 4"" # features/steps/todo.steps.py:105
+    Then the API responds with status code 201 (Created)                                                                # features/steps/api_steps.py:9
+    And the response body contains "title" of "task 4"                                                                  # features/steps/todo.steps.py:56
+    Then the system saves the todo item                                                                                 # features/steps/todo.steps.py:70
+Deleted todo with ID: 467
+
+  Scenario: The user attempts to create a new todo item without entering the title (Error Flow)     # features/create_todo_Item.feature:33
+    Given the todo management API is running                                                        # features/steps/api_steps.py:4
+    When the user sends a POST request to /todos with the title "<empty>"                           # features/steps/todo.steps.py:30
+    Then the API responds with status code 400 (Bad Request)                                        # features/steps/api_steps.py:9
+    And the response body contains "errorMessages" of "Failed Validation: title : can not be empty" # features/steps/todo.steps.py:56
+    And the todo item is not stored in the system                                                   # features/steps/todo.steps.py:131
+
+1 feature passed, 0 failed, 0 skipped
+9 scenarios passed, 0 failed, 0 skipped
+45 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.056s
+
+
+Running feature: features/view_todos_category.feature
+Checking if the API is running...
+API is running.
+Feature: View All Todos of a Category # features/view_todos_category.feature:1
+  As a user, I want to view all todos under a specific category, so that I can see tasks grouped by category.
+  Background:   # features/view_todos_category.feature:4
+
+  Scenario Outline: User views all todos of a specific category successfully (Normal Flow) -- @1.1   # features/view_todos_category.feature:14
+    Given the todo management API is running                                                         # features/steps/api_steps.py:4
+    When the user sends a GET request to /categories/1/todos                                         # features/steps/category_steps.py:587
+    Then the API responds with status code 200 (OK)                                                  # features/steps/api_steps.py:9
+    And the response body contains a list of all todos associated with category ID "1"               # features/steps/category_steps.py:559
+
+  Scenario Outline: User views all todos of a specific category successfully (Normal Flow) -- @1.2   # features/view_todos_category.feature:15
+    Given the todo management API is running                                                         # features/steps/api_steps.py:4
+    When the user sends a GET request to /categories/2/todos                                         # features/steps/category_steps.py:587
+    Then the API responds with status code 200 (OK)                                                  # features/steps/api_steps.py:9
+    And the response body contains a list of all todos associated with category ID "2"               # features/steps/category_steps.py:559
+
+  Scenario Outline: User views all todos of a specific category successfully (Normal Flow) -- @1.3   # features/view_todos_category.feature:16
+    Given the todo management API is running                                                         # features/steps/api_steps.py:4
+    When the user sends a GET request to /categories/3/todos                                         # features/steps/category_steps.py:587
+    Then the API responds with status code 200 (OK)                                                  # features/steps/api_steps.py:9
+    And the response body contains a list of all todos associated with category ID "3"               # features/steps/category_steps.py:559
+
+  Scenario Outline: User views todos of a non-existent category (Error Flow) -- @1.1   # features/view_todos_category.feature:26
+    Given the todo management API is running                                           # features/steps/api_steps.py:4
+    When the user sends a GET request to /categories/99/todos                          # features/steps/category_steps.py:587
+    Then the API responds with status code 404 (Not Found)                             # features/steps/api_steps.py:9
+      Assertion Failed: Expected status code 404, but got 200.
+
+    And the response body contains "errorMessages"                                     # None
+    And no todos are returned                                                          # None
+
+  Scenario Outline: User views todos of a non-existent category (Error Flow) -- @1.2   # features/view_todos_category.feature:27
+    Given the todo management API is running                                           # features/steps/api_steps.py:4
+    When the user sends a GET request to /categories/100/todos                         # features/steps/category_steps.py:587
+    Then the API responds with status code 404 (Not Found)                             # features/steps/api_steps.py:9
+      Assertion Failed: Expected status code 404, but got 200.
+
+    And the response body contains "errorMessages"                                     # None
+    And no todos are returned                                                          # None
+
+  Scenario Outline: User views todos of a category with no todos (Alternative Flow) -- @1.1   # features/view_todos_category.feature:37
+    Given the todo management API is running                                                  # features/steps/api_steps.py:4
+    Given the category with ID "5" has no associated todos                                    # features/steps/category_steps.py:578
+    When the user sends a GET request to /categories/5/todos                                  # features/steps/category_steps.py:587
+    Then the API responds with status code 200 (OK)                                           # features/steps/api_steps.py:9
+    And the response body contains an empty list                                              # features/steps/category_steps.py:541
+
+  Scenario Outline: User views todos of a category with no todos (Alternative Flow) -- @1.2   # features/view_todos_category.feature:38
+    Given the todo management API is running                                                  # features/steps/api_steps.py:4
+    Given the category with ID "6" has no associated todos                                    # features/steps/category_steps.py:578
+    When the user sends a GET request to /categories/6/todos                                  # features/steps/category_steps.py:587
+    Then the API responds with status code 200 (OK)                                           # features/steps/api_steps.py:9
+    And the response body contains an empty list                                              # features/steps/category_steps.py:541
+
+
+Failing scenarios:
+  features/view_todos_category.feature:26  User views todos of a non-existent category (Error Flow) -- @1.1 
+  features/view_todos_category.feature:27  User views todos of a non-existent category (Error Flow) -- @1.2 
+
+0 features passed, 1 failed, 0 skipped
+5 scenarios passed, 2 failed, 0 skipped
+26 steps passed, 2 failed, 4 skipped, 0 undefined
+Took 0m0.028s
+
+
+Running feature: features/create_project.feature
+Checking if the API is running...
+API is running.
+Feature: Create a New Project # features/create_project.feature:1
+  As a user, I want to create a new project so that I can manage my tasks effectively.
+  Background:   # features/create_project.feature:4
+
+  Scenario Outline: User creates a new project by specifying title and description (Normal Flow) -- @1.1   # features/create_project.feature:15
+    Given the todo management API is running                                                               # features/steps/api_steps.py:4
+    When the user sends a POST request to /projects with title "Project X" and description "Description X" # features/steps/project.steps.py:94
+    Then the API responds with status code 201 (Created)                                                   # features/steps/api_steps.py:9
+    And the response body confirms "title" of "Project X" and "description" of "Description X"             # features/steps/project.steps.py:132
+    Then the system saves the project                                                                      # features/steps/project.steps.py:146
+Deleted project with ID: 119
+
+  Scenario Outline: User creates a new project by specifying title and description (Normal Flow) -- @1.2   # features/create_project.feature:16
+    Given the todo management API is running                                                               # features/steps/api_steps.py:4
+    When the user sends a POST request to /projects with title "Project Y" and description "Description Y" # features/steps/project.steps.py:94
+    Then the API responds with status code 201 (Created)                                                   # features/steps/api_steps.py:9
+    And the response body confirms "title" of "Project Y" and "description" of "Description Y"             # features/steps/project.steps.py:132
+    Then the system saves the project                                                                      # features/steps/project.steps.py:146
+Deleted project with ID: 120
+
+  Scenario Outline: User creates a new project by specifying title and description (Normal Flow) -- @1.3   # features/create_project.feature:17
+    Given the todo management API is running                                                               # features/steps/api_steps.py:4
+    When the user sends a POST request to /projects with title "Project Z" and description "Description Z" # features/steps/project.steps.py:94
+    Then the API responds with status code 201 (Created)                                                   # features/steps/api_steps.py:9
+    And the response body confirms "title" of "Project Z" and "description" of "Description Z"             # features/steps/project.steps.py:132
+    Then the system saves the project                                                                      # features/steps/project.steps.py:146
+Deleted project with ID: 121
+
+  Scenario Outline: User attempts to create a project with an ID (Error Flow) -- @1.1   # features/create_project.feature:32
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user sends a POST request to /projects with an ID "101"                    # features/steps/project.steps.py:168
+    Then the API responds with status code 400 (Bad Request)                            # features/steps/api_steps.py:9
+    And the project is not stored in the system                                         # features/steps/project.steps.py:80
+
+  Scenario Outline: User attempts to create a project with an ID (Error Flow) -- @1.2   # features/create_project.feature:33
+    Given the todo management API is running                                            # features/steps/api_steps.py:4
+    When the user sends a POST request to /projects with an ID "102"                    # features/steps/project.steps.py:168
+    Then the API responds with status code 400 (Bad Request)                            # features/steps/api_steps.py:9
+    And the project is not stored in the system                                         # features/steps/project.steps.py:80
+
+1 feature passed, 0 failed, 0 skipped
+5 scenarios passed, 0 failed, 0 skipped
+23 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.031s
+
+
+Running feature: features/amend_project.feature
+Checking if the API is running...
+API is running.
+Feature: Update a Project # features/amend_project.feature:1
+  As a user, I want to update details of a project to keep information current.
+  Background:   # features/amend_project.feature:4
+
+  Scenario Outline: User updates a project with a POST request (Normal Flow) -- @1.1                        # features/amend_project.feature:16
+    Given the todo management API is running                                                                # features/steps/api_steps.py:4
+    Given a project with title "Project to Update" exists                                                   # features/steps/project.steps.py:9
+    When the user sends a POST request to the corresponding /projects/id with a new title "Updated Project" # features/steps/project.steps.py:25
+    Then the API responds with status code 200 (Ok)                                                         # features/steps/api_steps.py:9
+    And the project response body confirms "title" as "Updated Project"                                     # features/steps/project.steps.py:50
+    And the system updates the project                                                                      # features/steps/project.steps.py:68
+Deleted project with ID: 122
+
+  Scenario Outline: User updates a project with a PUT request (Alternate Flow) -- @1.1                     # features/amend_project.feature:27
+    Given the todo management API is running                                                               # features/steps/api_steps.py:4
+    Given a project with title "Project to Update" exists                                                  # features/steps/project.steps.py:9
+    When the user sends a PUT request to the corresponding /projects/id with a new title "Amended Project" # features/steps/project.steps.py:37
+    Then the API responds with status code 200 (Ok)                                                        # features/steps/api_steps.py:9
+    And the project response body confirms "title" as "Amended Project"                                    # features/steps/project.steps.py:50
+    And the system updates the project                                                                     # features/steps/project.steps.py:68
+Deleted project with ID: 123
+
+  Scenario Outline: User attempts to update a project with an invalid ID (Error Flow) -- @1.1   # features/amend_project.feature:36
+    Given the todo management API is running                                                    # features/steps/api_steps.py:4
+    When the user sends a PUT request to /projects/-1 with a new title "Invalid Update"         # features/steps/project.steps.py:58
+    Then the API responds with status code 404 (Not Found)                                      # features/steps/api_steps.py:9
+    And the project is not stored in the system                                                 # features/steps/project.steps.py:80
+
+1 feature passed, 0 failed, 0 skipped
+3 scenarios passed, 0 failed, 0 skipped
+16 steps passed, 0 failed, 0 skipped, 0 undefined
+Took 0m0.029s
+
+
